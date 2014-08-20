@@ -12,7 +12,7 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 
 @Configuration
 @EnableScheduling
-@ComponentScan("com.fintek")
+@ComponentScan("com.fintek.ets")
 @EnableWebSocketMessageBroker
 public class WebSocketMessageConfig extends AbstractWebSocketMessageBrokerConfigurer {
 	

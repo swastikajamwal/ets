@@ -29,15 +29,15 @@ public class JMXConfigurer {
 	@Bean
 	public MBeanExporter exporter() {
 		Map<String, Object> beans = new HashMap<String, Object>();
-		beans.put("portfolioSample:name=webSocketStats", monitor());
+		beans.put("portfolioSample:name=webSocketStatistics", monitor());
 		MBeanExporter exporter = new MBeanExporter();
 		exporter.setBeans(beans);
 		return exporter;
 	}
 
 	@Bean
-	public WebSocketStats monitor() {
-		return new WebSocketStats((SubProtocolWebSocketHandler) this.subProtocolWebSocketHandler,
+	public WebSocketStatistics monitor() {
+		return new WebSocketStatistics((SubProtocolWebSocketHandler) this.subProtocolWebSocketHandler,
 				this.clientInboundChannelExecutor, this.clientOutboundChannelExecutor,
 				this.messageBrokerSockJsTaskScheduler);
 	}
