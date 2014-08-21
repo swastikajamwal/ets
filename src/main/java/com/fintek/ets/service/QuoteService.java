@@ -46,7 +46,7 @@ public class QuoteService implements ApplicationListener<BrokerAvailabilityEvent
 		for (Quote quote : this.quoteGenerator.generateQuotes()) {
 			if (logger.isTraceEnabled()) {
 				logger.trace("Sending quote " + quote);
-				System.out.println("Sending quote " + quote);
+//				System.out.println("Sending quote " + quote);
 			}
 			if (this.brokerAvailable.get()) {
 				this.messagingTemplate.convertAndSend("/topic/price.stock." + quote.getTicker(), quote);

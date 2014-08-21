@@ -70,10 +70,10 @@ public class QFJtest implements LogonListener {
 		});
 		t.start();
 		
-		while(runQFJ) {}
-		
-		System.err.println("SHUTTING DOWN.........");
-		initiator.stop();		
+//		while(runQFJ) {}
+//		
+//		System.err.println("SHUTTING DOWN.........");
+//		initiator.stop();		
 	}
 
 	@Override

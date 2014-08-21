@@ -11,34 +11,34 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class Portfolio {
 
 	private final Map<String,PortfolioPosition> positionLookup = new LinkedHashMap<String,PortfolioPosition>();
-//	private final ReadWriteLock lock = new ReentrantReadWriteLock();
+	private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
 
 	public List<PortfolioPosition> getPositions() {
-//		lock.readLock().lock();
-//		try {
+		lock.readLock().lock();
+		try {
 			return new ArrayList<PortfolioPosition>(positionLookup.values());
-//		}finally {
-//			lock.readLock().unlock();
-//		}
+		}finally {
+			lock.readLock().unlock();
+		}
 	}
 
 	public void addPosition(PortfolioPosition position) {
-//		lock.writeLock().lock();
-//		try {
+		lock.writeLock().lock();
+		try {
 			this.positionLookup.put(position.getTicker(), position);
-//		}finally {
-//			lock.writeLock().unlock();
-//		}
+		}finally {
+			lock.writeLock().unlock();
+		}
 	}
 
 	public PortfolioPosition getPortfolioPosition(String ticker) {
-//		lock.readLock().lock();
-//		try {
+		lock.readLock().lock();
+		try {
 			return this.positionLookup.get(ticker);
-//		}finally {
-//			lock.readLock().unlock();
-//		}
+		}finally {
+			lock.readLock().unlock();
+		}
 	}
 
 	/**
@@ -49,13 +49,13 @@ public class Portfolio {
 		if ((position == null) || (sharesToBuy < 1)) {
 			return null;
 		}
-//		lock.writeLock().lock();
-//		try {
+		lock.writeLock().lock();
+		try {
 			position = new PortfolioPosition(position, sharesToBuy);
 			addPosition(position);
-//		}finally {
-//			lock.writeLock().unlock();
-//		}
+		}finally {
+			lock.writeLock().unlock();
+		}
 		return position;
 	}
 
@@ -67,13 +67,13 @@ public class Portfolio {
 		if ((position == null) || (sharesToSell < 1) || (position.getShares() < sharesToSell)) {
 			return null;
 		}
-//		lock.writeLock().lock();
-//		try {
+		lock.writeLock().lock();
+		try {
 			position = new PortfolioPosition(position, -sharesToSell);
 			this.positionLookup.put(ticker, position);
-//		}finally {
-//			lock.writeLock().unlock();
-//		}
+		}finally {
+			lock.writeLock().unlock();
+		}
 		return position;
 	}
 
