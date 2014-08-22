@@ -23,11 +23,9 @@ import org.springframework.stereotype.Service;
 public class QuoteService implements ApplicationListener<BrokerAvailabilityEvent> {
 
 	private static Log logger = LogFactory.getLog(QuoteService.class);
-
 	private final MessageSendingOperations<String> messagingTemplate;
-
 	private final StockQuoteGenerator quoteGenerator = new StockQuoteGenerator();
-
+	private final FXQuoteGenerator fxQuoteGenerator = new FXQuoteGenerator();
 	private AtomicBoolean brokerAvailable = new AtomicBoolean();
 
 
@@ -41,15 +39,24 @@ public class QuoteService implements ApplicationListener<BrokerAvailabilityEvent
 		this.brokerAvailable.set(event.isBrokerAvailable());
 	}
 
-	@Scheduled(fixedDelay=3000)
+	@Scheduled(fixedDelay=5000)
 	public void sendQuotes() {
 		for (Quote quote : this.quoteGenerator.generateQuotes()) {
 			if (logger.isTraceEnabled()) {
-				logger.trace("Sending quote " + quote);
-//				System.out.println("Sending quote " + quote);
+//				logger.trace("Sending quote " + quote);
 			}
 			if (this.brokerAvailable.get()) {
 				this.messagingTemplate.convertAndSend("/topic/price.stock." + quote.getTicker(), quote);
+			}
+		}		
+	}
+	
+	@Scheduled(fixedDelay=4000)
+	public void sendFXQuotes() {
+		for(FXQuote quote : this.fxQuoteGenerator.generateQuotes()) {
+//			logger.trace("Sending quote " + quote);
+			if (this.brokerAvailable.get()) {
+				this.messagingTemplate.convertAndSend("/topic/price.currency." + quote.getSymbol(), quote);
 			}
 		}
 	}
@@ -92,5 +99,5 @@ public class QuoteService implements ApplicationListener<BrokerAvailabilityEvent
 		}
 
 	}
-
+	
 }

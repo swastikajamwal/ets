@@ -6,6 +6,7 @@ function ApplicationModel(stompClient) {
   self.portfolio = ko.observable(new PortfolioModel());
   self.trade = ko.observable(new TradeModel(stompClient));
   self.notifications = ko.observableArray();
+  self.feed = ko.observable(new FeedModel());
 
   self.connect = function() {
       stompClient.connect({}, function(frame) {
@@ -18,6 +19,10 @@ function ApplicationModel(stompClient) {
       });
       stompClient.subscribe("/topic/price.stock.*", function(message) {
         self.portfolio().processQuote(JSON.parse(message.body));
+      });
+      stompClient.subscribe("/topic/price.currency.*", function(message) {
+//    	  alert(message.body);
+    	  self.feed().processFeed(JSON.parse(message.body));
       });
       stompClient.subscribe("/user/queue/position-updates", function(message) {
         self.pushNotification("Position update " + message.body);
@@ -160,3 +165,50 @@ function TradeModel(stompClient) {
     $('#trade-dialog').modal('hide');
   }
 }
+
+function FeedModel() {
+	  var self = this;
+	  self.rows = ko.observableArray();
+	  var feedRowLookup = {};
+
+	//  self.loadPositions = function(positions) {
+//	    for ( var i = 0; i < positions.length; i++) {
+//	      var row = new FeedRow(positions[i]);
+//	      self.rows.push(row);
+//	      rowLookup[row.symbol] = row;
+//	    }
+	//  };
+
+	  self.processFeed = function(fxquote) {
+	    if (feedRowLookup.hasOwnProperty(fxquote.symbol)) {
+	    	feedRowLookup[fxquote.symbol].updateBid(fxquote.bid);
+	    	feedRowLookup[fxquote.symbol].updateAsk(fxquote.ask);
+	    }else{
+	    	var row = new FeedRow(fxquote);
+	    	self.rows.push(row);
+	    	feedRowLookup[fxquote.symbol] = row;
+	    }
+	  };
+
+};
+
+function FeedRow(data) {
+	  var self = this;
+
+	  self.symbol = data.symbol;
+	  self.bid = ko.observable(data.bid);
+	  self.ask = ko.observable(data.ask);
+	  self.changeBid = ko.observable(0);
+	  self.changeAsk = ko.observable(0);
+
+	  self.updateBid = function(newPrice) {
+	    var delta = (newPrice - self.bid()).toFixed(2);
+	    self.changeBid((delta / self.bid() * 100).toFixed(2));
+	    self.bid(newPrice);
+	  };
+	  self.updateAsk = function(newPrice) {
+		  var delta = (newPrice - self.ask()).toFixed(2);
+		  self.changeAsk((delta / self.ask() * 100).toFixed(2));
+		  self.ask(newPrice);
+	  };
+};
