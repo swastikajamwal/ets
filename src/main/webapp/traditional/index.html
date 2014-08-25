@@ -18,17 +18,17 @@
           <span class="text-info" data-bind="text: username"><em></em></span>&nbsp;
           <button data-bind="click: logout" class="btn"><i class="icon-off"></i></button>
         </div>
-        <div id="fx-content">
-          <h5>FX feeds</h5>
+        <h5>FX feeds</h5>
+        <div id="fx-content-scrollable">
           <table class="table table-striped">
           <thead>
             <tr>
-              <th>Symbol</th>
-              <th class="number">Bid</th>
-              <th class="number">Ask</th>
+              <th class="text">Symbol</th>
+              <th class="text">Bid</th>
+              <th class="text">Ask</th>
             </tr>
           </thead>
-          <tbody data-bind="foreach: feed().rows">
+          <tbody data-bind="foreach: feed().rows" class="tscroll">
             <tr>
               <td data-bind="text: symbol"></td>
               <td data-bind="text: bid, style: {color: changeBid() < 0 ? 'red' : 'green'}" class="number"></td>

@@ -28,3 +28,30 @@ body {
 .table tfoot {
   font-weight: bold;
 }
+
+.table tbody.tscroll {
+	height: 120px; 
+	overflow-y: auto;
+}
+
+#fx-content-scrollable {
+	height: 300px; 
+    overflow: auto;  
+    width: 300px; 
+    margin-top:20px;
+}
+
+#fx-content-scrollable table {
+	width:100%;
+    background-color:#f9f9f9;
+}
+
+#fx-content-scrollable table thead th .text {
+	position:fixed;   
+    top:0px;  
+    height:20px;
+    width:35%;
+    border:1px solid red;
+}
+
+
