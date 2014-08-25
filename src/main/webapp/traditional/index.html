@@ -38,6 +38,7 @@
           <tbody></tbody>
         </table>
         </div>
+        <canvas id="fxcharts" width="400" height="400"></canvas>
         <h3 class="muted">Trading Portfolio</h3>
       </div>
       <div id="main-content">
@@ -123,6 +124,7 @@
     <script src="../assets/lib/knockout/knockout.js"></script>
     <script src="../assets/lib/sockjs/sockjs.js"></script>
     <script src="../assets/lib/stomp/lib/stomp.min.js"></script>
+    <script src="../assets/lib/chart/Chart.min.js"></script>
 
     <!-- application -->
     <script src="portfolio.js"></script>
@@ -137,6 +139,37 @@
 
         appModel.connect();
         appModel.pushNotification("Trade results take a 2-3 second simulated delay. Notifications will appear.");
+        
+        var data = {
+        	    labels: ["January", "February", "March", "April", "May", "June", "July"],
+        	    datasets: [
+        	        {
+        	            label: "My First dataset",
+        	            fillColor: "rgba(220,220,220,0.2)",
+        	            strokeColor: "rgba(220,220,220,1)",
+        	            pointColor: "rgba(220,220,220,1)",
+        	            pointStrokeColor: "#fff",
+        	            pointHighlightFill: "#fff",
+        	            pointHighlightStroke: "rgba(220,220,220,1)",
+        	            data: [65, 59, 80, 81, 56, 55, 40]
+        	        },
+        	        {
+        	            label: "My Second dataset",
+        	            fillColor: "rgba(151,187,205,0.2)",
+        	            strokeColor: "rgba(151,187,205,1)",
+        	            pointColor: "rgba(151,187,205,1)",
+        	            pointStrokeColor: "#fff",
+        	            pointHighlightFill: "#fff",
+        	            pointHighlightStroke: "rgba(151,187,205,1)",
+        	            data: [28, 48, 40, 19, 86, 27, 90]
+        	        }
+        	    ]
+        	};
+
+        var ctx = $("#fxcharts").get(0).getContext("2d");
+        var myNewChart = new Chart(ctx).Line(data, {
+        	bezierCurve: false
+        });
       })();
     </script>
 
