@@ -11,34 +11,49 @@
     <![endif]-->
   </head>
   <body>
-
+  
+  	<Table>
+	  	<tbody>
+	  		<tr>	  			
+	  			<td>
+			        <div id="fx-content-scrollable">
+	  				<h5>FX feeds</h5>
+			          <table class="table table-striped">
+			          <thead>
+			            <tr>
+			              <th class="text">Symbol</th>
+			              <th class="text">Bid</th>
+			              <th class="text">Ask</th>
+			            </tr>
+			          </thead>
+			          <tbody data-bind="foreach: feed().rows" class="tscroll">
+			            <tr>
+			              <td data-bind="text: symbol"></td>
+			              <td data-bind="text: bid, style: {color: changeBid() < 0 ? 'red' : 'green'}" class="number"></td>
+			              <td data-bind="text: ask, style: {color: changeAsk() < 0 ? 'red' : 'green'}" class="number"></td>
+			             </tr>
+			          </tbody>
+			          <tbody></tbody>
+			        </table>
+			        </div>
+	  			</td>
+	  			<td>
+	  				<div>
+						<div>
+							<canvas id="fxcharts" height="400" width="600"></canvas>
+						</div>
+					</div>	  				
+	  			</td>	  			
+	  		</tr>	  	
+	  	</tbody>
+  	</Table>  
+  	
     <div class="container">
       <div id="heading" class="masthead">
         <div class="pull-right">
           <span class="text-info" data-bind="text: username"><em></em></span>&nbsp;
           <button data-bind="click: logout" class="btn"><i class="icon-off"></i></button>
         </div>
-        <h5>FX feeds</h5>
-        <div id="fx-content-scrollable">
-          <table class="table table-striped">
-          <thead>
-            <tr>
-              <th class="text">Symbol</th>
-              <th class="text">Bid</th>
-              <th class="text">Ask</th>
-            </tr>
-          </thead>
-          <tbody data-bind="foreach: feed().rows" class="tscroll">
-            <tr>
-              <td data-bind="text: symbol"></td>
-              <td data-bind="text: bid, style: {color: changeBid() < 0 ? 'red' : 'green'}" class="number"></td>
-              <td data-bind="text: ask, style: {color: changeAsk() < 0 ? 'red' : 'green'}" class="number"></td>
-             </tr>
-          </tbody>
-          <tbody></tbody>
-        </table>
-        </div>
-        <canvas id="fxcharts" width="400" height="400"></canvas>
         <h3 class="muted">Trading Portfolio</h3>
       </div>
       <div id="main-content">
@@ -124,23 +139,15 @@
     <script src="../assets/lib/knockout/knockout.js"></script>
     <script src="../assets/lib/sockjs/sockjs.js"></script>
     <script src="../assets/lib/stomp/lib/stomp.min.js"></script>
-    <script src="../assets/lib/chart/Chart.min.js"></script>
+    <script src="../assets/lib/chart/Chart.js"></script>
 
     <!-- application -->
     <script src="portfolio.js"></script>
     <script type="text/javascript">
       (function() {
-        //var socket = new SockJS('/spring-websocket-portfolio/portfolio');
-        var socket = new SockJS('/ets/portfolio');
-        var stompClient = Stomp.over(socket);
-
-        var appModel = new ApplicationModel(stompClient);
-        ko.applyBindings(appModel);
-
-        appModel.connect();
-        appModel.pushNotification("Trade results take a 2-3 second simulated delay. Notifications will appear.");
-        
-        var data = {
+    	alert("hi...");
+    	
+    	var data = {
         	    labels: ["January", "February", "March", "April", "May", "June", "July"],
         	    datasets: [
         	        {
@@ -165,11 +172,23 @@
         	        }
         	    ]
         	};
+    	
+    	
+        var socket = new SockJS('/ets/portfolio');
+        var stompClient = Stomp.over(socket);
 
-        var ctx = $("#fxcharts").get(0).getContext("2d");
-        var myNewChart = new Chart(ctx).Line(data, {
-        	bezierCurve: false
-        });
+        var appModel = new ApplicationModel(stompClient);
+        ko.applyBindings(appModel);
+
+        appModel.connect();
+        appModel.pushNotification("Trade results take a 2-3 second simulated delay. Notifications will appear.");
+        
+        var chartCtx = document.getElementById("fxcharts").getContext("2d");
+    	//var ctx = $("#fxcharts").get(0).getContext("2d");
+    	var lineChart = new Chart(chartCtx).Line(data, {
+        	responsive: true
+        	});
+        
       })();
     </script>
 
