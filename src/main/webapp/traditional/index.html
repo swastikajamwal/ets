@@ -66,6 +66,11 @@
         <table class="table table-striped">
           <thead>
             <tr>
+              <th>Order</th>
+              <th>Time</th>
+              <th>Type</th>
+              <th>Size</th>
+              <th>Symbol</th>
               <th>Company</th>
               <th>Ticker</th>
               <th class="number">Price</th>
@@ -78,6 +83,11 @@
           </thead>
           <tbody data-bind="foreach: portfolio().rows">
             <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td data-bind="text: company"></td>
               <td data-bind="text: ticker"></td>
               <td data-bind="text: formattedPrice" class="number"></td>
@@ -192,6 +202,8 @@
         var chartCtx = document.getElementById("fxcharts").getContext("2d");
     	//var ctx = $("#fxcharts").get(0).getContext("2d");
     	lineChart = new Chart(chartCtx).Line(data, {
+    		scaleFontSize: 8,
+    		scaleLineWidth:.1,
         	responsive: true
         	});
     	

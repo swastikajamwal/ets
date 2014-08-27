@@ -12,6 +12,20 @@ public class PortfolioPosition {
 	private final int shares;
 
 	private final long updateTime;
+	
+	private String order;
+	private String time;
+	private String type;
+	private double size;
+	private String symbol;
+	
+	public PortfolioPosition(String order, String symbol, String type, double size, int price) {
+		this.company = "";
+		this.ticker = "";
+		this.price = price;
+		this.shares = 0;
+		this.updateTime = System.currentTimeMillis();
+	}
 
 
 	public PortfolioPosition(String company, String ticker, double price, int shares) {
@@ -54,6 +68,26 @@ public class PortfolioPosition {
 	public String toString() {
 		return "PortfolioPosition [company=" + this.company + ", ticker=" + this.ticker
 				+ ", price=" + this.price + ", shares=" + this.shares + "]";
+	}
+
+	public String getOrder() {
+		return order;
+	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public double getSize() {
+		return size;
+	}
+
+	public String getSymbol() {
+		return symbol;
 	}
 
 }
