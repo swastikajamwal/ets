@@ -11,13 +11,25 @@
     <![endif]-->
   </head>
   <body>
-  
-  	<Table>
+  	<div class="container"> 
+  	<div id="heading" class="masthead">
+       <div class="pull-right">
+         <span class="text-info" data-bind="text: username"><em></em></span>&nbsp;
+         <button data-bind="click: logout" class="btn"><i class="icon-off"></i></button>
+       </div>
+       <h3 class="muted">ETS</h3>
+     </div>
+  	<table>
+  		<thead>
+  			<tr>
+  				<th><h5 class="muted">Market Watch</h5></th>
+  				<th><h5 class="muted">Chart</h5></th>
+  			</tr>
+  		</thead>
 	  	<tbody>
 	  		<tr>	  			
 	  			<td>
 			        <div id="fx-content-scrollable">
-	  				<h5>FX feeds</h5>
 			          <table class="table table-striped">
 			          <thead>
 			            <tr>
@@ -28,7 +40,7 @@
 			          </thead>
 			          <tbody data-bind="foreach: feed().rows" class="tscroll">
 			            <tr>
-			              <td data-bind="text: symbol"></td>
+			              <td data-bind="text: symbol" onClick="addData();"></td>
 			              <td data-bind="text: bid, style: {color: changeBid() < 0 ? 'red' : 'green'}" class="number"></td>
 			              <td data-bind="text: ask, style: {color: changeAsk() < 0 ? 'red' : 'green'}" class="number"></td>
 			             </tr>
@@ -40,7 +52,7 @@
 	  			<td>
 	  				<div>
 						<div>
-							<canvas id="fxcharts" height="400" width="600"></canvas>
+							<canvas id="fxcharts" height="300" width="600"></canvas>
 						</div>
 					</div>	  				
 	  			</td>	  			
@@ -48,15 +60,9 @@
 	  	</tbody>
   	</Table>  
   	
-    <div class="container">
-      <div id="heading" class="masthead">
-        <div class="pull-right">
-          <span class="text-info" data-bind="text: username"><em></em></span>&nbsp;
-          <button data-bind="click: logout" class="btn"><i class="icon-off"></i></button>
-        </div>
-        <h3 class="muted">Trading Portfolio</h3>
-      </div>
+    <!-- div class="container"-->
       <div id="main-content">
+      	<h5 class="muted">Trades</h5>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -144,9 +150,9 @@
     <!-- application -->
     <script src="portfolio.js"></script>
     <script type="text/javascript">
+    	var lineChart;
       (function() {
-    	alert("hi...");
-    	
+    	var dataPoints = [65, 59, 80, 81, 56, 55, 40];
     	var data = {
         	    labels: ["January", "February", "March", "April", "May", "June", "July"],
         	    datasets: [
@@ -158,7 +164,7 @@
         	            pointStrokeColor: "#fff",
         	            pointHighlightFill: "#fff",
         	            pointHighlightStroke: "rgba(220,220,220,1)",
-        	            data: [65, 59, 80, 81, 56, 55, 40]
+        	            data: dataPoints
         	        },
         	        {
         	            label: "My Second dataset",
@@ -185,11 +191,19 @@
         
         var chartCtx = document.getElementById("fxcharts").getContext("2d");
     	//var ctx = $("#fxcharts").get(0).getContext("2d");
-    	var lineChart = new Chart(chartCtx).Line(data, {
+    	lineChart = new Chart(chartCtx).Line(data, {
         	responsive: true
         	});
-        
+    	
       })();
+      
+      function addData(){
+    	  alert(lineChart.datasets[0].points.length);
+    	  if(lineChart.datasets[0].points.length> 10){
+    		  lineChart.removeData();
+    	  }
+    	  lineChart.addData([40, 60], "August");    	  
+      }
     </script>
 
   </body>

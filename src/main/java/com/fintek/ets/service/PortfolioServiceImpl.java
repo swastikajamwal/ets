@@ -23,14 +23,14 @@ public class PortfolioServiceImpl implements PortfolioService {
 		portfolio.addPosition(new PortfolioPosition("Dell Inc.", "DELL", 13.44, 50));
 		portfolio.addPosition(new PortfolioPosition("Microsoft", "MSFT", 34.15, 33));
 		portfolio.addPosition(new PortfolioPosition("Oracle", "ORCL", 31.22, 45));
-		this.portfolioLookup.put("fabrice", portfolio);
+		this.portfolioLookup.put("trader1", portfolio);
 
 		portfolio = new Portfolio();
 		portfolio.addPosition(new PortfolioPosition("EMC Corporation", "EMC", 24.30, 75));
 		portfolio.addPosition(new PortfolioPosition("Google Inc", "GOOG", 905.09, 5));
 		portfolio.addPosition(new PortfolioPosition("VMware, Inc.", "VMW", 65.58, 23));
 		portfolio.addPosition(new PortfolioPosition("Red Hat", "RHT", 48.30, 15));
-		this.portfolioLookup.put("paulson", portfolio);
+		this.portfolioLookup.put("admin", portfolio);
 	}
 
 

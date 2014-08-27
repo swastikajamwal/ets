@@ -20,7 +20,8 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter{
 						XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)).and()
 
 			.formLogin()
-				.defaultSuccessUrl("/index.html")
+				//.defaultSuccessUrl("/index.html")
+				.defaultSuccessUrl("/traditional")
 				.loginPage("/login.html")
 				.failureUrl("/login.html?error")
 				.permitAll()
@@ -41,8 +42,8 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter{
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth
 			.inMemoryAuthentication()
-				.withUser("fabrice").password("fab123").roles("USER").and()
-				.withUser("paulson").password("bond").roles("ADMIN","USER");
+				.withUser("trader1").password("trd123").roles("USER").and()
+				.withUser("admin").password("admin").roles("ADMIN","USER");
 	}
 
 }
