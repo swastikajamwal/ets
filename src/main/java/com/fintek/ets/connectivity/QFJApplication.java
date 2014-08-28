@@ -19,6 +19,11 @@ import quickfix.field.MsgType;
 import quickfix.field.Password;
 import quickfix.field.Username;
 
+/**
+ * 
+ * @author sjamwal
+ *
+ */
 public class QFJApplication implements Application {
 	
 	private ConcurrentMap<String, List<LogonListener>> logonListeners = new ConcurrentHashMap<String, List<LogonListener>>();

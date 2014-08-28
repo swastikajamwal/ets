@@ -10,6 +10,11 @@ import org.springframework.web.socket.config.annotation.AbstractWebSocketMessage
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 
+/**
+ * 
+ * @author sjamwal
+ *
+ */
 @Configuration
 @EnableScheduling
 @ComponentScan("com.fintek.ets")

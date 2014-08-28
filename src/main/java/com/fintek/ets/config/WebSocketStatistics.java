@@ -14,6 +14,11 @@ import org.springframework.web.socket.messaging.SubProtocolWebSocketHandler;
 import org.springframework.web.socket.sockjs.transport.session.AbstractHttpSockJsSession;
 import org.springframework.web.socket.sockjs.transport.session.WebSocketServerSockJsSession;
 
+/**
+ * 
+ * @author sjamwal
+ *
+ */
 public class WebSocketStatistics {
 	
 	private static Log logger = LogFactory.getLog(WebSocketStatistics.class);

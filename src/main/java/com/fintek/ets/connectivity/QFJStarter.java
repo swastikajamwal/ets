@@ -29,17 +29,17 @@ import quickfix.field.SubscriptionRequestType;
 import quickfix.field.Symbol;
 import quickfix.fix42.MarketDataRequest;
 
-public class QFJtest implements LogonListener {
+/**
+ * 
+ * @author sjamwal
+ *
+ */
+public class QFJStarter implements LogonListener {
 	
 	private static volatile boolean runQFJ = true; 
 	private QFJApplication app;
 	private static final String SESS = "FIX.4.4:Q082->PXMD";
 
-	public static void main(String[] args) throws FileNotFoundException, ConfigError {
-		QFJtest test = new QFJtest();
-		test.start();
-	}
-	
 	public void start() throws FileNotFoundException, ConfigError {
 		org.apache.log4j.BasicConfigurator.configure();
 		

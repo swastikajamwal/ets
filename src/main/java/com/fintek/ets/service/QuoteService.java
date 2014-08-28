@@ -18,7 +18,11 @@ import org.springframework.messaging.simp.broker.BrokerAvailabilityEvent;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-
+/**
+ * 
+ * @author sjamwal
+ *
+ */
 @Service
 public class QuoteService implements ApplicationListener<BrokerAvailabilityEvent> {
 

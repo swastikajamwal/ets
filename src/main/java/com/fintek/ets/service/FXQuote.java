@@ -2,7 +2,11 @@ package com.fintek.ets.service;
 
 import java.math.BigDecimal;
 
-
+/**
+ * 
+ * @author sjamwal
+ *
+ */
 public class FXQuote {
 
 	private final String symbol;

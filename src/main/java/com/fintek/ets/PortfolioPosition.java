@@ -1,6 +1,10 @@
 package com.fintek.ets;
 
-
+/**
+ * 
+ * @author sjamwal
+ *
+ */
 public class PortfolioPosition {
 
 	private final String company;

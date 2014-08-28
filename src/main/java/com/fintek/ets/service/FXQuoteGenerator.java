@@ -10,6 +10,11 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+/**
+ * 
+ * @author sjamwal
+ *
+ */
 public class FXQuoteGenerator {
 	
 	private final Random random = new Random();

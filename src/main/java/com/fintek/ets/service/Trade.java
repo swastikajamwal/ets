@@ -1,6 +1,10 @@
 package com.fintek.ets.service;
 
-
+/**
+ * 
+ * @author sjamwal
+ *
+ */
 public class Trade {
 
 	private String ticker;

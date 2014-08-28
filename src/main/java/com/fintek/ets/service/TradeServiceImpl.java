@@ -14,7 +14,11 @@ import com.fintek.ets.Portfolio;
 import com.fintek.ets.PortfolioPosition;
 import com.fintek.ets.service.Trade.Side;
 
-
+/**
+ * 
+ * @author sjamwal
+ *
+ */
 @Service
 public class TradeServiceImpl implements TradeService {
 

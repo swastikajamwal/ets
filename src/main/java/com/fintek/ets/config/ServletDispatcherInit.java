@@ -4,6 +4,11 @@ import javax.servlet.ServletRegistration.Dynamic;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+/**
+ * 
+ * @author sjamwal
+ *
+ */
 public class ServletDispatcherInit extends AbstractAnnotationConfigDispatcherServletInitializer{
 
 	@Override
