@@ -11,6 +11,18 @@ http://spring.io/guides/gs/messaging-stomp-websocket/
 http://assets.spring.io/wp/WebSocketBlogPost.html
 
 
+Tools/Technologies/Methodologies
+---------------------------------
+1) Backend - Java 7, Spring 4+, Spring boot, Spring Integration, Hibernate, Redis or Coherence or Hazelcast, Oracle DB, Maven
+2) Frontend (Client/Server) -  HTML. Javascript - AngularJS, BootstrapUI, Websockets/SockJS, STOMP, Java 7, Spring4+, Spring boot, Spring MVC, ActiveMQ or caching (Redis/Coherence/Hazelcast)
+2) IDE - Eclipse/IntelliJ
+2) Testing - JUnit/Mockito/HSQLDB/Selenium
+3) Code Coverage - Jacoco (Sonar)
+4) Code Formatting/Style - 
+5) Performance tests - JMeter
+6) JVM Monitoring/Profiling - JConsole
+
+
 TODO
 ----
 1) Add chart
