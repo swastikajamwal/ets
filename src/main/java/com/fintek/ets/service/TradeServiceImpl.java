@@ -38,7 +38,7 @@ public class TradeServiceImpl implements TradeService {
 	 * In real application a trade is probably executed in an external system, i.e. asynchronously.
 	 */
 	public void executeTrade(Trade trade) {
-
+		System.out.println("executeTrade.....!!");
 		Portfolio portfolio = this.portfolioService.findPortfolio(trade.getUsername());
 		String ticker = trade.getTicker();
 		int sharesToTrade = trade.getShares();
