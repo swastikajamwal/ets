@@ -1,6 +1,7 @@
 package com.fintek.ets;
 
 /**
+ * The portfolio position class.
  * 
  * @author sjamwal
  *

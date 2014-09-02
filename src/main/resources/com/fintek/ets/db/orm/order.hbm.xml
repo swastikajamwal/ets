@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  	<class name="com.fintek.ets.db.model.Order" table="USER">
+  	  	<id column="ID" name="id" type="java.lang.String">
+  	  	  	<generator class="org.hibernate.id.UUIDGenerator">
+  	  	  	</generator>
+  	  	</id>
+  	  	<property column="SYMBOL" name="symbol" type="java.lang.String"/>
+		<property column="SIZE" name="size" type="java.lang.String"/>
+		<property column="ORDER_PRICE" name="orderPrice" type="java.lang.String"/>
+		<property column="STATUS" name="status" type="java.lang.String"/>
+		<property column="USER_ID" name="userID" type="java.lang.String"/>
+		<property column="SIDE" name="side" type="java.lang.String"/>
+		
+  	</class>
+</hibernate-mapping>

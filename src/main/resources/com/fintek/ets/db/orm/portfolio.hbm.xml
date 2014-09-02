@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  	<class name="com.fintek.ets.db.model.TradePortfolio" table="USER">
+  	  	<id column="ID" name="id" type="java.lang.String">
+  	  	  	<generator class="org.hibernate.id.UUIDGenerator">
+  	  	  	</generator>
+  	  	</id>
+  	  	<property column="USER_ID" name="userId" type="java.lang.String"/>
+		<property column="TOTAL_VALUE" name="totalValue" type="java.lang.String"/>
+		<property column="PANDL" name="pandl" type="java.lang.String"/>
+		
+  	</class>
+</hibernate-mapping>

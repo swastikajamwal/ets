@@ -10,7 +10,7 @@
 		</layout>
 	</appender>
 	
-	<logger name="org.springframework.samples">
+	<logger name="com.fintek.ets">
 		<level value="debug" />
 	</logger>
 

@@ -1,6 +1,7 @@
 package com.fintek.ets.connectivity;
 
 /**
+ * An interface for listening to logon callback from FIX
  * 
  * @author sjamwal
  *

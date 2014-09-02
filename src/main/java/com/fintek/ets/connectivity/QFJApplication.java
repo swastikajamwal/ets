@@ -20,6 +20,7 @@ import quickfix.field.Password;
 import quickfix.field.Username;
 
 /**
+ * The QFJ application engine.
  * 
  * @author sjamwal
  *

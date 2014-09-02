@@ -5,6 +5,7 @@ import javax.servlet.ServletRegistration.Dynamic;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**
+ * Servlet dispatcher config class.
  * 
  * @author sjamwal
  *

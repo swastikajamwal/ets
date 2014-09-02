@@ -13,6 +13,7 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.messaging.SubProtocolWebSocketHandler;
 
 /**
+ * JMX config class.
  * 
  * @author sjamwal
  *

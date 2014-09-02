@@ -4,7 +4,7 @@ import com.fintek.ets.Portfolio;
 
 
 /**
- * 
+ * A portfolio service interface.
  * @author sjamwal
  *
  */

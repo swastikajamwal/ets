@@ -3,7 +3,7 @@ package com.fintek.ets.service;
 import java.math.BigDecimal;
 
 /**
- * 
+ * The quote class
  * @author sjamwal
  *
  */

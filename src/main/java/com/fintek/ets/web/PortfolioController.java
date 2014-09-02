@@ -19,7 +19,7 @@ import com.fintek.ets.service.Trade;
 import com.fintek.ets.service.TradeService;
 
 /**
- * 
+ * The controller class handling server side communication.
  * @author sjamwal
  *
  */

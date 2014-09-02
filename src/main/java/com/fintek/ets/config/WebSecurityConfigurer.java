@@ -7,12 +7,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 
 /**
+ * WebSecurity class
  * 
  * @author sjamwal
  *
  */
 @EnableWebSecurity
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter{
+	
+	private volatile boolean dbAuth;
+	private String dbAuthQuery;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -45,10 +49,17 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter{
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth
+		if(dbAuth){
+			auth.jdbcAuthentication().authoritiesByUsernameQuery(dbAuthQuery);
+			
+		}else{
+			auth
 			.inMemoryAuthentication()
 				.withUser("trader1").password("trd123").roles("USER").and()
 				.withUser("admin").password("admin").roles("ADMIN","USER");
+			
+		}
+		
 	}
 
 }

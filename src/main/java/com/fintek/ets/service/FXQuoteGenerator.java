@@ -11,7 +11,7 @@ import java.util.Random;
 import java.util.Set;
 
 /**
- * 
+ * A sample quote generater class.
  * @author sjamwal
  *
  */

@@ -1,31 +1,32 @@
 package com.fintek.ets.service;
 
 /**
+ * A class that models a trade
  * 
  * @author sjamwal
  *
  */
 public class Trade {
 
-	private String ticker;
-	private int shares;
+	private String symbol;
+	private int size;
 	private Side action;
 	private String username;
 
-	public String getTicker() {
-		return this.ticker;
+	public String getSymbol() {
+		return this.symbol;
 	}
 
-	public void setTicker(String ticker) {
-		this.ticker = ticker;
+	public void setSymbol(String symbol) {
+		this.symbol = symbol;
 	}
 
-	public int getShares() {
-		return this.shares;
+	public int getSize() {
+		return this.size;
 	}
 
-	public void setShares(int shares) {
-		this.shares = shares;
+	public void setSize(int size) {
+		this.size = size;
 	}
 
 	public Side getAction() {
@@ -46,7 +47,7 @@ public class Trade {
 
 	@Override
 	public String toString() {
-		return "[ticker=" + this.ticker + ", shares=" + this.shares
+		return "[ticker=" + this.symbol + ", size=" + this.size
 				+ ", action=" + this.action + ", username=" + this.username + "]";
 	}
 

@@ -15,6 +15,7 @@ import org.springframework.web.socket.sockjs.transport.session.AbstractHttpSockJ
 import org.springframework.web.socket.sockjs.transport.session.WebSocketServerSockJsSession;
 
 /**
+ * A class for web statistics.
  * 
  * @author sjamwal
  *

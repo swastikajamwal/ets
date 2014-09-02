@@ -1,7 +1,7 @@
 package com.fintek.ets.service;
 
 /**
- * 
+ * The trade service interface
  * @author sjamwal
  *
  */

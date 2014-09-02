@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
 /**
- * 
+ * A class specifying the application context resource.
  * @author sjamwal
  *
  */

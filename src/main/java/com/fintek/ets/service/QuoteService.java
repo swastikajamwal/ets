@@ -19,7 +19,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 /**
- * 
+ * Quote service class for indices.
  * @author sjamwal
  *
  */

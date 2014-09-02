@@ -171,14 +171,6 @@ function FeedModel() {
 	  self.rows = ko.observableArray();
 	  var feedRowLookup = {};
 
-	//  self.loadPositions = function(positions) {
-//	    for ( var i = 0; i < positions.length; i++) {
-//	      var row = new FeedRow(positions[i]);
-//	      self.rows.push(row);
-//	      rowLookup[row.symbol] = row;
-//	    }
-	//  };
-
 	  self.processFeed = function(fxquote) {
 	    if (feedRowLookup.hasOwnProperty(fxquote.symbol)) {
 	    	feedRowLookup[fxquote.symbol].updateBid(fxquote.bid);
@@ -189,7 +181,6 @@ function FeedModel() {
 	    	feedRowLookup[fxquote.symbol] = row;
 	    }
 	  };
-
 };
 
 function FeedRow(data) {

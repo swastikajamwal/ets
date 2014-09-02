@@ -30,6 +30,7 @@ import quickfix.field.Symbol;
 import quickfix.fix42.MarketDataRequest;
 
 /**
+ * Aclass to start the qfj engine.
  * 
  * @author sjamwal
  *
