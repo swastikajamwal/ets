@@ -2,6 +2,7 @@ package com.fintek.ets.db.dao;
 
 import java.util.List;
 
+import com.fintek.ets.db.model.Order;
 import com.fintek.ets.db.model.User;
 
 /**

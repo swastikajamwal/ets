@@ -29,3 +29,54 @@ TODO
 2) Change portfolio to fx trades
 3) Add spring db classes/hbm etc
 4) 
+
+MYSQL
+=====
+1) Start: mysqld --console
+2) Stop: mysqladmon -u root shutdown
+3) Connect via command line client window: mysql -u root
+
+show databases;
+use ets;
+show tables;
+
+CREATE TABLE `ets`.`user` (
+  `id` VARCHAR(45) NOT NULL,
+  `user_name` VARCHAR(10) NULL,
+  `password` VARCHAR(10) NULL,
+  `first_name` VARCHAR(10) NULL,
+  `last_name` VARCHAR(10) NULL,
+  `email` VARCHAR(45) NULL,
+  `role` VARCHAR(10) NULL,
+  PRIMARY KEY (`id`));
+  
+CREATE TABLE `ets`.`portfolio` (
+  `id` VARCHAR(45) NOT NULL,
+  `user_id` VARCHAR(10) NULL,
+  `total_value` VARCHAR(10) NULL,
+  `pandl` VARCHAR(10) NULL,
+  PRIMARY KEY (`id`));
+  
+CREATE TABLE `ets`.`trade` (
+  `id` VARCHAR(45) NOT NULL,
+  `symbol` VARCHAR(10) NULL,
+  `size` VARCHAR(10) NULL,
+  `trade_price` VARCHAR(10) NULL,
+  `trade_date` TIMESTAMP NULL,
+  `user_id` VARCHAR(45) NULL,
+  `side` VARCHAR(5) NULL,
+  PRIMARY KEY (`id`));
+  
+CREATE TABLE `ets`.`order` (
+  `id` VARCHAR(45) NOT NULL,
+  `symbol` VARCHAR(5) NULL,
+  `size` VARCHAR(10) NULL,
+  `order_price` VARCHAR(10) NULL,
+  `status` VARCHAR(10) NULL,
+  `user_id` VARCHAR(45) NULL,
+  `side` VARCHAR(10) NULL,
+  PRIMARY KEY (`id`));
+  
+
+insert into user values ('1', 'trader1', 'trd123', 'trader', '1', 'trader1@email.com', 'user');
+insert into user values ('2', 'admin', 'admin', 'admin', '', 'admin@email.com', 'admin');

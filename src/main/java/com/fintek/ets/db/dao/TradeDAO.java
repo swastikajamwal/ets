@@ -2,8 +2,8 @@ package com.fintek.ets.db.dao;
 
 import java.util.List;
 
-import com.fintek.ets.db.model.User;
-import com.fintek.ets.service.Trade;
+import com.fintek.ets.db.model.Trade;
+
 
 /**
  * The DAO interface for Trade table.

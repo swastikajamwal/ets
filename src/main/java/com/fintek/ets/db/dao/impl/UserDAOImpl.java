@@ -2,11 +2,19 @@ package com.fintek.ets.db.dao.impl;
 
 import java.util.List;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import com.fintek.ets.db.dao.UserDAO;
 import com.fintek.ets.db.model.User;
 
+
+/**
+ * 
+ * @author sjamwal
+ *
+ */
 public class UserDAOImpl implements UserDAO {
 	
 	private SessionFactory sessionFactory;
@@ -17,7 +25,21 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public List<User> getUserList() {
-		return this.sessionFactory.getCurrentSession().createQuery("from ets.User user").list();
+		Transaction trans = null;
+		Session session = sessionFactory.openSession();
+		try {
+			trans = session.beginTransaction();
+			return session.createQuery("from User").list();
+		}catch(Throwable t){
+			System.err.println("Exception in getUserList()....");
+			t.printStackTrace();
+			trans.rollback();						
+		}finally{
+			if(session.isConnected()) {
+				trans.commit();
+			}
+		}
+		return null;
 	}
 
 	@Override

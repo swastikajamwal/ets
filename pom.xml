@@ -158,7 +158,7 @@
 		    <artifactId>quickfixj</artifactId>
 		    <version>1.5.3</version>
 		    <scope>system</scope>
-		    <systemPath>/Users/rajiv/workspace-UCLMajorProject/ets/lib/quickfixj-all-1.5.3.jar</systemPath>
+		    <systemPath>C:/work/workspaces/test/ets/lib/quickfixj-all-1.5.3.jar</systemPath>
 		</dependency>
 
         <dependency>
@@ -215,10 +215,25 @@
 		   <artifactId>hibernate-core</artifactId>
 		   <version>4.3.6.Final</version>
 		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.6</version>
+		</dependency>
 
-		
-        
-    </dependencies>
+
+
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-kernel</artifactId>
+			<version>2.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-library</artifactId>
+			<version>2.10.4</version>
+		</dependency>
+	</dependencies>
 
 	<repositories>
 		<repository>

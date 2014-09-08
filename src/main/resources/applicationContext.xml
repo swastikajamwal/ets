@@ -4,17 +4,17 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
         
-    <bean id="qfj" class="com.fintek.ets.connectivity.QFJStarter" init-method="start">
-    </bean>
+    <!-- bean id="qfj" class="com.fintek.ets.connectivity.QFJStarter" init-method="start">
+    </bean-->
     
     <bean id="etsDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:8889/ets"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/ets"/>
         <property name="username" value="root"/>
-        <property name="password" value="root"/>
+        <property name="password" value=""/>
     </bean>
     
-    <bean id="etsSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="etsDataSource"/>
         <property name="mappingResources">
             <list>
@@ -25,10 +25,31 @@
             </list>
         </property>
         <property name="hibernateProperties">
-            <value>
-                hibernate.dialect=org.hibernate.dialect.HSQLDialect
-            </value>
+        	<props>
+        		<prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+        		<prop key="hbm2ddl.auto">create</prop>
+        	</props>
         </property>
+    </bean>
+    
+    <!-- bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean-->
+    
+    <bean id="tradeDAOImpl" class="com.fintek.ets.db.dao.impl.TradeDAOImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="userDAOImpl" class="com.fintek.ets.db.dao.impl.UserDAOImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="orderDAOImpl" class="com.fintek.ets.db.dao.impl.OrderDAOImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="portfolioDAOImpl" class="com.fintek.ets.db.dao.impl.PortfolioDAOImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
     </bean>
         
 </beans>

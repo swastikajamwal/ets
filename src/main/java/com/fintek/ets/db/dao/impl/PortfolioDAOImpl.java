@@ -2,7 +2,9 @@ package com.fintek.ets.db.dao.impl;
 
 import java.util.List;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import com.fintek.ets.db.dao.PortfolioDAO;
 import com.fintek.ets.db.model.TradePortfolio;
@@ -22,8 +24,21 @@ public class PortfolioDAOImpl implements PortfolioDAO {
 
 	@Override
 	public List<TradePortfolio> getPortfolioList() {
-		// TODO Auto-generated method stub
-		return this.sessionFactory.getCurrentSession().createQuery("from ets.Portfolio portfolio").list();
+		Transaction trans = null;
+		Session session = sessionFactory.openSession();
+		try {
+			trans = session.beginTransaction();
+			return session.createQuery("from TradePortfolio").list();
+		}catch(Throwable t){
+			System.err.println("Exception in getPortfolioList()....");
+			t.printStackTrace();
+			trans.rollback();						
+		}finally{
+			if(session.isConnected()) {
+				trans.commit();
+			}
+		}
+		return null;
 	}
 
 	@Override

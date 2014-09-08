@@ -3,15 +3,20 @@ package com.fintek.ets.service;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fintek.ets.Portfolio;
 import com.fintek.ets.PortfolioPosition;
+import com.fintek.ets.db.dao.TradeDAO;
 import com.fintek.ets.service.Trade.Side;
 
 /**
@@ -27,12 +32,15 @@ public class TradeServiceImpl implements TradeService {
 	private final SimpMessageSendingOperations messagingTemplate;
 	private final PortfolioService portfolioService;
 	private final List<TradeResult> tradeResults = new CopyOnWriteArrayList<>();
+	private final List<Trade> trades = new CopyOnWriteArrayList<>();
+	private final CachedService cachedService;
 
 
 	@Autowired
-	public TradeServiceImpl(SimpMessageSendingOperations messagingTemplate, PortfolioService portfolioService) {
+	public TradeServiceImpl(SimpMessageSendingOperations messagingTemplate, PortfolioService portfolioService, CachedService cachedService) {
 		this.messagingTemplate = messagingTemplate;
 		this.portfolioService = portfolioService;
+		this.cachedService = cachedService;
 	}
 
 	/**
@@ -66,6 +74,10 @@ public class TradeServiceImpl implements TradeService {
 				this.tradeResults.remove(result);
 			}
 		}
+	}
+	
+	@PostConstruct
+	public void start() {
 	}
 
 

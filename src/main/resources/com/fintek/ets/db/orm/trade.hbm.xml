@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC
 "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-  	<class name="com.fintek.ets.db.model.Trade" table="USER">
+  	<class name="com.fintek.ets.db.model.Trade" table="Trade">
   	  	<id column="ID" name="id" type="java.lang.String">
   	  	  	<generator class="org.hibernate.id.UUIDGenerator">
   	  	  	</generator>
@@ -11,7 +11,7 @@
   	  	<property column="SYMBOL" name="symbol" type="java.lang.String"/>
 		<property column="SIZE" name="size" type="java.lang.String"/>
 		<property column="TRADE_PRICE" name="tradePrice" type="java.lang.String"/>
-		<property column="TRADE_DATE" name="tradeDate" type="java.lang.String"/>
+		<property column="TRADE_DATE" name="tradeDate" type="java.util.Date"/>
 		<property column="USER_ID" name="userID" type="java.lang.String"/>
 		<property column="SIDE" name="side" type="java.lang.String"/>
 		

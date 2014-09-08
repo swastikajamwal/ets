@@ -2,14 +2,13 @@ package com.fintek.ets.db.dao.impl;
 
 import java.util.List;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
-import com.fintek.ets.db.dao.Order;
-import com.fintek.ets.db.dao.OrderDAO;
 import com.fintek.ets.db.dao.TradeDAO;
-import com.fintek.ets.db.dao.UserDAO;
-import com.fintek.ets.db.model.User;
-import com.fintek.ets.service.Trade;
+import com.fintek.ets.db.model.Trade;
+
 
 /**
  * The DAO class for Trade table
@@ -27,7 +26,21 @@ public class TradeDAOImpl implements TradeDAO {
 
 	@Override
 	public List<Trade> getTradeList() {
-		return this.sessionFactory.getCurrentSession().createQuery("from ets.Order order").list();
+		Transaction trans = null;
+		Session session = sessionFactory.openSession();
+		try {
+			trans = session.beginTransaction();
+			return session.createQuery("from Trade").list();
+		}catch(Throwable t){
+			System.err.println("Exception in getTradeList()....");
+			t.printStackTrace();
+			trans.rollback();						
+		}finally{
+			if(session.isConnected()) {
+				trans.commit();
+			}
+		}
+		return null;
 	}
 
 	@Override
