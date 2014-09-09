@@ -91,3 +91,4 @@ insert into portfolio values ('trader1', 'trader1', '10000.000', '0.0');
 
 commit;
 
+
