@@ -9,26 +9,27 @@ package com.fintek.ets;
 public class PortfolioPosition {
 
 	private final String company;
-
 	private final String ticker;
-
 	private final double price;
-
 	private final int shares;
-
-	private final long updateTime;
 	
+	private final long updateTime;	
 	private String order;
 	private String time;
 	private String type;
 	private double size;
 	private String symbol;
 	
-	public PortfolioPosition(String order, String symbol, String type, double size, int price) {
-		this.company = "";
-		this.ticker = "";
+	public PortfolioPosition(String order, String symbol, String type, double size, double price) {
+		this.order = order;
+		this.symbol = symbol;
+		this.type = type;
+		this.size = size;
 		this.price = price;
+		
+		this.ticker = symbol;
 		this.shares = 0;
+		this.company = symbol;
 		this.updateTime = System.currentTimeMillis();
 	}
 
@@ -71,7 +72,7 @@ public class PortfolioPosition {
 
 	@Override
 	public String toString() {
-		return "PortfolioPosition [company=" + this.company + ", ticker=" + this.ticker
+		return "PortfolioPosition [order=" + this.order + ", company=" + this.company + ", ticker=" + this.ticker
 				+ ", price=" + this.price + ", shares=" + this.shares + "]";
 	}
 
@@ -93,6 +94,31 @@ public class PortfolioPosition {
 
 	public String getSymbol() {
 		return symbol;
+	}
+
+
+	public void setOrder(String order) {
+		this.order = order;
+	}
+
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+
+	public void setSize(double size) {
+		this.size = size;
+	}
+
+
+	public void setSymbol(String symbol) {
+		this.symbol = symbol;
 	}
 
 }

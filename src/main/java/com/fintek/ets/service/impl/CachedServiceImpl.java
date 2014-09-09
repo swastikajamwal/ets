@@ -1,6 +1,11 @@
 package com.fintek.ets.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.annotation.PostConstruct;
@@ -9,6 +14,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import scala.Array;
 
 import com.fintek.ets.db.dao.OrderDAO;
 import com.fintek.ets.db.dao.PortfolioDAO;
@@ -27,6 +34,7 @@ public class CachedServiceImpl implements CachedService {
 	private final List<User> userList = new CopyOnWriteArrayList<>();
 	private final List<Order> orderList = new CopyOnWriteArrayList<>();
 	private final List<Trade> trades = new CopyOnWriteArrayList<>();
+	private final ConcurrentMap<String, List<Trade>> tradesByUser = new ConcurrentHashMap<>();
 	private final List<TradePortfolio> portfolios = new CopyOnWriteArrayList<>();
 	
 	private final UserDAO userDAO;
@@ -63,7 +71,18 @@ public class CachedServiceImpl implements CachedService {
 	private void loadTrades() {
 		List<Trade> tradeList = tradeDAO.getTradeList();
 		for(Trade e : tradeList) {
-			trades.add(e);			
+			trades.add(e);	
+			List<Trade> list = tradesByUser.get(e.getUserID());
+			if(list == null) {
+				list = new ArrayList<Trade>();	
+				List<Trade> ls = tradesByUser.putIfAbsent(e.getUserID(), list);
+				if(ls != null) {
+					list = ls;					
+				}
+			}
+			synchronized(list) {
+				list.add(e);			
+			}
 		}
 		logger.info("Trades loaded..... "+trades.size());
 	}
@@ -93,6 +112,11 @@ public class CachedServiceImpl implements CachedService {
 	public boolean isValidUser(String userName, String password) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public Map<String, List<com.fintek.ets.db.model.Trade>> getTradesByUser() {
+		return Collections.unmodifiableMap(tradesByUser);
 	}
 
 }

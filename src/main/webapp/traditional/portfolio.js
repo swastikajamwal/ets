@@ -94,6 +94,9 @@ function PortfolioModel() {
 function PortfolioRow(data) {
   var self = this;
 
+  self.order = data.order;
+  self.side = data.side;
+  self.symbol = data.symbol;
   self.company = data.company;
   self.ticker = data.ticker;
   self.price = ko.observable(data.price);
