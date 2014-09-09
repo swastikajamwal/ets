@@ -77,6 +77,17 @@ CREATE TABLE `ets`.`orders` (
   `side` VARCHAR(10) NULL,
   PRIMARY KEY (`id`));
   
+ALTER TABLE `ets`.`trade` 
+ADD COLUMN `status` VARCHAR(10) NULL AFTER `side`;
+  
 
 insert into user values ('1', 'trader1', 'trd123', 'trader', '1', 'trader1@email.com', 'user');
 insert into user values ('2', 'admin', 'admin', 'admin', '', 'admin@email.com', 'admin');
+
+insert into trade values ('1001', 'GBPUSD', '1.0', '1.68341', '2014.09.02 09:23:00', 'trader1', 'buy', 'position');
+insert into trade values ('1002', 'EURGBP', '1.0', '0.79977', '2014.09.09 11:23:07', 'trader1', 'sell', 'position');
+
+insert into portfolio values ('trader1', 'trader1', '10000.000', '0.0');
+
+commit;
+

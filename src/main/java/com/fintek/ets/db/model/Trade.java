@@ -11,6 +11,7 @@ public class Trade {
 	private Date tradeDate;
 	private String userID;
 	private String side;
+	private String status;
 	
 
 	public String getId() {
@@ -67,6 +68,14 @@ public class Trade {
 
 	public void setTradeDate(Date tradeDate) {
 		this.tradeDate = tradeDate;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

@@ -14,6 +14,7 @@
 		<property column="TRADE_DATE" name="tradeDate" type="java.util.Date"/>
 		<property column="USER_ID" name="userID" type="java.lang.String"/>
 		<property column="SIDE" name="side" type="java.lang.String"/>
+		<property column="STATUS" name="status" type="java.lang.String"/>
 		
   	</class>
 </hibernate-mapping>
