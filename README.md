@@ -67,7 +67,7 @@ CREATE TABLE `ets`.`trade` (
   `side` VARCHAR(5) NULL,
   PRIMARY KEY (`id`));
   
-CREATE TABLE `ets`.`order` (
+CREATE TABLE `ets`.`orders` (
   `id` VARCHAR(45) NOT NULL,
   `symbol` VARCHAR(5) NULL,
   `size` VARCHAR(10) NULL,
