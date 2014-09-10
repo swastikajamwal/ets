@@ -23,6 +23,7 @@ function ApplicationModel(stompClient) {
       stompClient.subscribe("/topic/price.currency.*", function(message) {
 //    	  alert(message.body);
     	  self.feed().processFeed(JSON.parse(message.body));
+    	  self.portfolio().updateCurrentPrice(JSON.parse(message.body));
       });
       stompClient.subscribe("/user/queue/position-updates", function(message) {
         self.pushNotification("Position update " + message.body);
@@ -77,6 +78,7 @@ function PortfolioModel() {
       var row = new PortfolioRow(positions[i]);
       self.rows.push(row);
       rowLookup[row.ticker] = row;
+      //alert(row.ticker);
     }
   };
 
@@ -89,29 +91,59 @@ function PortfolioModel() {
   self.updatePosition = function(position) {
     rowLookup[position.ticker].shares(position.shares);
   };
+  
+  self.updateCurrentPrice = function(quote) {
+	  //alert('In portfolio.updateCurrentPrice: '+quote.symbol);
+	  if (rowLookup.hasOwnProperty(quote.symbol)){
+		  //alert('has prop: '+quote.symbol);
+		  rowLookup[quote.symbol].updateCurrentPrice(quote);	  
+	  }
+  };
 };
+
+
 
 function PortfolioRow(data) {
   var self = this;
-
+  //alert('data-> '+data);
+  //alert('order: '+data.order);
+  //alert('type: '+data.type);
+  //alert('symbol: '+data.symbol);
+  //alert('company: '+data.company);
+  //alert('price: '+data.price);
+  //alert('size: '+data.size);
   self.order = data.order;
-  self.side = data.side;
+  self.type = ko.observable(data.type);
   self.symbol = data.symbol;
   self.company = data.company;
   self.ticker = data.ticker;
+  self.size = data.size;
   self.price = ko.observable(data.price);
+  self.currentPrice = ko.observable();
+  self.updateTime = data.updateTime;
   self.formattedPrice = ko.computed(function() { return "$" + self.price().toFixed(2); });
   self.change = ko.observable(0);
   self.arrow = ko.observable();
   self.shares = ko.observable(data.shares);
   self.value = ko.computed(function() { return (self.price() * self.shares()); });
-  self.formattedValue = ko.computed(function() { return "$" + self.value().toFixed(2); });
+  self.formattedValue = ko.computed(function() { return "$" + (100000*self.value()).toFixed(2); });
 
   self.updatePrice = function(newPrice) {
-    var delta = (newPrice - self.price()).toFixed(2);
+    var delta = (newPrice - self.price());
     self.arrow((delta < 0) ? '<i class="icon-arrow-down"></i>' : '<i class="icon-arrow-up"></i>');
-    self.change((delta / self.price() * 100).toFixed(2));
-    self.price(newPrice);
+    self.change((delta / self.price()).toFixed(5));
+    //self.price(newPrice);
+    self.formattedValue(delta * 100000);
+  };
+  
+  self.updateCurrentPrice = function(quote) {
+	  if(self.type == 'buy'){
+		  self.currentPrice(quote.bid);
+		  self.updatePrice(quote.bid);
+	  }else{
+		  self.currentPrice(quote.ask);
+		  self.updatePrice(quote.ask);
+	  }
   };
 };
 
@@ -172,8 +204,8 @@ function TradeModel(stompClient) {
 function FeedModel() {
 	  var self = this;
 	  self.rows = ko.observableArray();
-	  var feedRowLookup = {};
 
+	  var feedRowLookup = {};
 	  self.processFeed = function(fxquote) {
 	    if (feedRowLookup.hasOwnProperty(fxquote.symbol)) {
 	    	feedRowLookup[fxquote.symbol].updateBid(fxquote.bid);

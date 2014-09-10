@@ -73,12 +73,12 @@
               <th>Symbol</th>
               <th>Trade Price</th>
               <th>Current Price</th>
-              <th>Company</th>
+              <!-- th>Company</th>
               <th>Ticker</th>
-              <th class="number">Price</th>
+              <th class="number">Price</th-->
               <th class="number">Change</th>
               <th>%</th>
-              <th class="number">Shares</th>
+              <!-- th class="number">Shares</th-->
               <th class="number">Value</th>
               <th></th>
             </tr>
@@ -87,17 +87,17 @@
             <tr>
               <td data-bind="text: order"></td>
               <td data-bind="text: updateTime"></td>
-              <td data-bind="text: side"></td>
+              <td data-bind="text: type"></td>
               <td data-bind="text: size"></td>
               <td data-bind="text: symbol"></td>
-              <td data-bind="text: tradePrice"></td>
-              <td></td>
-              <td data-bind="text: company"></td>
+              <td data-bind="text: price"></td>
+              <td data-bind="text: currentPrice"></td>
+              <!-- td data-bind="text: company"></td>
               <td data-bind="text: ticker"></td>
-              <td data-bind="text: formattedPrice" class="number"></td>
+              <td data-bind="text: formattedPrice" class="number"></td-->
               <td data-bind="text: change, style: {color: change() < 0 ? 'red' : 'green'}" class="number"></td>
               <td data-bind="html: arrow" class="icon"></td>
-              <td data-bind="text: shares" class="number"></td>
+              <!-- td data-bind="text: shares" class="number"></td-->
               <td data-bind="text: formattedValue" class="number"></td>
               <td class="trade-buttons">
                 <button class="btn btn-primary" data-bind="click: $root.trade().showBuy">Buy</button>

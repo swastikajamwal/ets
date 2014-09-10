@@ -28,7 +28,7 @@ public class PortfolioPosition {
 		this.price = price;
 		
 		this.ticker = symbol;
-		this.shares = 0;
+		this.shares = (int) size;
 		this.company = symbol;
 		this.updateTime = System.currentTimeMillis();
 	}
@@ -72,7 +72,7 @@ public class PortfolioPosition {
 
 	@Override
 	public String toString() {
-		return "PortfolioPosition [order=" + this.order + ", company=" + this.company + ", ticker=" + this.ticker
+		return "PortfolioPosition [order=" + this.order + ", symbol=" + this.symbol + ", company=" + this.company + ", ticker=" + this.ticker
 				+ ", price=" + this.price + ", shares=" + this.shares + "]";
 	}
 
