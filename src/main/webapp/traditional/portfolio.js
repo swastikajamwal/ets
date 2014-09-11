@@ -63,13 +63,14 @@ function PortfolioModel() {
     return result;
   });
 
-  self.totalValue = ko.computed(function() {
+  self.totalValue = ko.pureComputed(function() {
     var result = 0;
     for ( var i = 0; i < self.rows().length; i++) {
+      //result += self.rows()[i].value();
       result += self.rows()[i].value();
     }
-    return "$" + result.toFixed(2);
-  });
+    return result.toFixed(2);
+  }).extend({notify : 'always'});
 
   var rowLookup = {};
 
@@ -96,7 +97,8 @@ function PortfolioModel() {
 	  //alert('In portfolio.updateCurrentPrice: '+quote.symbol);
 	  if (rowLookup.hasOwnProperty(quote.symbol)){
 		  //alert('has prop: '+quote.symbol);
-		  rowLookup[quote.symbol].updateCurrentPrice(quote);	  
+		  rowLookup[quote.symbol].updateCurrentPrice(quote);	
+		  self.totalValue;
 	  }
   };
 };
@@ -125,15 +127,16 @@ function PortfolioRow(data) {
   self.change = ko.observable(0);
   self.arrow = ko.observable();
   self.shares = ko.observable(data.shares);
-  self.value = ko.computed(function() { return (self.price() * self.shares()); });
-  self.formattedValue = ko.computed(function() { return "$" + (100000*self.value()).toFixed(2); });
+  self.value = ko.observable();//ko.computed(function() { return (self.price() * self.shares()); });
+  self.formattedValue =  ko.observable();//ko.computed(function() { return "$" + (100000*self.value()).toFixed(2); });
 
   self.updatePrice = function(newPrice) {
     var delta = (newPrice - self.price());
     self.arrow((delta < 0) ? '<i class="icon-arrow-down"></i>' : '<i class="icon-arrow-up"></i>');
     self.change((delta / self.price()).toFixed(5));
     //self.price(newPrice);
-    self.formattedValue(delta * 100000);
+    self.value(delta * 100000);
+    self.formattedValue((delta * 100000).toFixed(2));
   };
   
   self.updateCurrentPrice = function(quote) {
