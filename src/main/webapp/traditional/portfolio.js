@@ -231,13 +231,15 @@ function FeedRow(data) {
 	  self.changeAsk = ko.observable(0);
 
 	  self.updateBid = function(newPrice) {
-	    var delta = (newPrice - self.bid()).toFixed(2);
-	    self.changeBid((delta / self.bid() * 100).toFixed(2));
+	    var delta = (newPrice - self.bid());//.toFixed(2);
+	    //self.changeBid((delta / self.bid() * 100).toFixed(2));
+	    self.changeBid(delta);
 	    self.bid(newPrice);
 	  };
 	  self.updateAsk = function(newPrice) {
-		  var delta = (newPrice - self.ask()).toFixed(2);
-		  self.changeAsk((delta / self.ask() * 100).toFixed(2));
+		  var delta = (newPrice - self.ask());//.toFixed(2);
+		  //self.changeAsk((delta / self.ask() * 100).toFixed(2));
+		  self.changeAsk(delta);
 		  self.ask(newPrice);
 	  };
 };

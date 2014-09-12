@@ -19,6 +19,7 @@ body {
 
 .table th.number, .table td.number {
   text-align: right;
+  font-size: 8;
 }
 
 .table td.trade-buttons {
@@ -54,4 +55,44 @@ body {
     border:1px solid red;
 }
 
+.btn-block-sell {
+  background-color: #E9967A;
+  border-color: #0044cc #0044cc #002a80;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  display: block;
+  width: 100%;
+  padding-right: 0;
+  padding-left: 0;
+  margin-bottom: 6px;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
 
+.btn-block-buy {
+  background-color: #1E90FF;
+  border-color: #0044cc #0044cc #002a80;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  display: block;
+  width: 100%;
+  padding-right: 0;
+  padding-left: 0;
+  margin-bottom: 6px;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.btn-block-close {
+  background-color: #F0E68C;
+  border-color: #0044cc #0044cc #002a80;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  display: block;
+  width: 100%;
+  padding-right: 0;
+  padding-left: 0;
+  margin-bottom: 6px;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}

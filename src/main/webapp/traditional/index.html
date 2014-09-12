@@ -41,8 +41,8 @@
 			          <tbody data-bind="foreach: feed().rows" class="tscroll">
 			            <tr>
 			              <td data-bind="text: symbol" onClick="addData();"></td>
-			              <td data-bind="text: bid, style: {color: changeBid() < 0 ? 'red' : 'green'}" class="number"></td>
-			              <td data-bind="text: ask, style: {color: changeAsk() < 0 ? 'red' : 'green'}" class="number"></td>
+			              <td data-bind="text: bid, style: {color: changeBid() < 0 ? 'red' : 'blue'}" class="number"></td>
+			              <td data-bind="text: ask, style: {color: changeAsk() < 0 ? 'red' : 'blue'}" class="number"></td>
 			             </tr>
 			          </tbody>
 			          <tbody></tbody>
@@ -95,7 +95,7 @@
               <!-- td data-bind="text: company"></td>
               <td data-bind="text: ticker"></td>
               <td data-bind="text: formattedPrice" class="number"></td-->
-              <td data-bind="text: change, style: {color: change() < 0 ? 'red' : 'green'}" class="number"></td>
+              <td data-bind="text: change, style: {color: change() < 0 ? 'red' : 'blue'}" class="number"></td>
               <td data-bind="html: arrow" class="icon"></td>
               <!-- td data-bind="text: shares" class="number"></td-->
               <td data-bind="text: formattedValue" class="number"></td>
@@ -122,32 +122,76 @@
           </ul>
         </div>
       </div>
+      
       <div id="trade-dialog" class="modal hide fade" tabindex="-1">
         <div class="modal-body">
           <form class="form-horizontal" data-bind="submit: trade().executeTrade">
             <fieldset>
               <legend>
-                <span data-bind="text: trade().action"></span>
-                <span data-bind="text: trade().currentRow().company"></span> Stock
+                <!-- span data-bind="text: trade().action"></span-->
+                <span data-bind="text: trade().currentRow().company"></span>
               </legend>
             </fieldset>
+            <!-- table>
+            	<tbody>
+            		<tr>
+            			<td><label class="control-label">Symbol:</label></td>
+            			<td><span data-bind="text: trade().currentRow().company"></span></td>
+            		</tr>
+            		<tr>
+            			<td><label class="control-label" for="inputShares">Volume:</label></td>
+            			<td>
+            				<div class="controls">
+				                <input id="inputShares" type="text" data-bind="value: trade().sharesToTrade">
+				                <span class="help-inline" data-bind="text: trade().error">Please enter</span>
+				            </div>
+            			</td>
+            		</tr>
+            		<tr></tr>
+            	</tbody>
+            </table-->
             <div class="control-group" data-bind="css: {error: trade().error()}">
-              <label class="control-label" for="inputShares">Shares</label>
+            	<div class="row">
+            		<div class="span3"><label class="control-label">Symbol:</label></div>
+            		<div class="span3"><label class="control-label" data-bind="text: trade().currentRow().company"></label></div>
+            	</div>
+            	<div class="row">
+            		<div class="span3"><label class="control-label">Type:</label></div>
+            		<div class="span3"><label class="control-label">Market Execution</label></div>
+            	</div>
+              <!-- label class="control-label">Symbol:</label>
+              <div class="controls">
+                <span data-bind="text: trade().currentRow().company"></span>
+              </div-->
+              <label class="control-label" for="inputShares">Volume:</label>
               <div class="controls">
                 <input id="inputShares" type="text" data-bind="value: trade().sharesToTrade">
                 <span class="help-inline" data-bind="text: trade().error">Please enter</span>
               </div>
             </div>
+            <div class="row">
+            	<div class="span3"><button class="btn-block-sell" data-dismiss="modal">Sell by Market</button></div>
+            	<div class="span3"><button class="btn-block-buy" type="submit">Buy by Market</button></div>            	
+            </div>
+            <div class="row">
+            	<div class="span6">
+            		<button class="btn-block-close" data-dismiss="modal">
+            			Close #<span data-bind="text: trade().currentRow().order"></span> 
+            			<span data-bind="text: trade().currentRow().type"></span> 
+            			<span data-bind="text: trade().currentRow().size"></span> 
+            			<span data-bind="text: trade().currentRow().symbol"></span>
+            		</button>
+            	</div>
+            </div>
+            
             <div class="control-group">
-              <div class="controls">
-                <label class="checkbox"><input type="checkbox" data-bind="checked: trade().suppressValidation">
-                  Suppress client-side validation</label>
+              <div class="row">
+              	<div class="span7">
+                <label class="text text-warning" style="font-size: '8'">
+                  Attention: Trade will be executed at market conditions, difference with requested price may be significant!</label>
+              	</div>              
               </div>
             </div>
-            <button class="btn" data-dismiss="modal">Close</button>
-            <button class="btn btn-primary" type="submit">
-              <span data-bind="text: trade().action"></span>
-            </button>
           </form>
         </div>
       </div>
