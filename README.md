@@ -37,6 +37,7 @@ MYSQL
 3) Connect via command line client window: mysql -u root
 
 show databases;
+CREATE SCHEMA `ets` ;
 use ets;
 show tables;
 

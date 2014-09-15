@@ -1,23 +1,24 @@
 package com.fintek.ets.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.fintek.ets.Portfolio;
 import com.fintek.ets.PortfolioPosition;
-import com.fintek.ets.db.dao.TradeDAO;
-import com.fintek.ets.service.Trade.Side;
+import com.fintek.ets.db.model.Order;
+import com.fintek.ets.oms.OrderManagementService;
 
 /**
  * The trade service class responsible for execution of trades and updation of portfolio.
@@ -34,13 +35,15 @@ public class TradeServiceImpl implements TradeService {
 	private final List<TradeResult> tradeResults = new CopyOnWriteArrayList<>();
 	private final List<Trade> trades = new CopyOnWriteArrayList<>();
 	private final CachedService cachedService;
+	private final OrderManagementService oms;
 
 
 	@Autowired
-	public TradeServiceImpl(SimpMessageSendingOperations messagingTemplate, PortfolioService portfolioService, CachedService cachedService) {
+	public TradeServiceImpl(SimpMessageSendingOperations messagingTemplate, PortfolioService portfolioService, CachedService cachedService, OrderManagementService oms) {
 		this.messagingTemplate = messagingTemplate;
 		this.portfolioService = portfolioService;
 		this.cachedService = cachedService;
+		this.oms = oms;
 	}
 
 	/**
@@ -50,18 +53,39 @@ public class TradeServiceImpl implements TradeService {
 		System.out.println("executeTrade.....!!");
 		Portfolio portfolio = this.portfolioService.findPortfolio(trade.getUsername());
 		String symbol = trade.getSymbol();
-		int sharesToTrade = trade.getSize();
+		double size = trade.getSize();
+		
+		System.out.println("trade: "+trade.toString());
+		com.fintek.ets.db.model.Trade executedTrade = oms.executeOrder(getOrder(trade));
+		
+		cachedService.saveTrade(executedTrade);
+		System.out.println("Trade saved in executeTrade.....");
 
-		PortfolioPosition newPosition = (trade.getAction() == Side.Buy) ?
-				portfolio.buy(symbol, sharesToTrade) : portfolio.sell(symbol, sharesToTrade);
+//		PortfolioPosition newPosition = (trade.getAction() == Side.Buy) ?
+//				portfolio.buy(symbol, sharesToTrade) : portfolio.sell(symbol, sharesToTrade);
+//
+//		if (newPosition == null) {
+//			String payload = "Rejected trade " + trade;
+//			this.messagingTemplate.convertAndSendToUser(trade.getUsername(), "/queue/errors", payload);
+//			return;
+//		}
 
-		if (newPosition == null) {
-			String payload = "Rejected trade " + trade;
-			this.messagingTemplate.convertAndSendToUser(trade.getUsername(), "/queue/errors", payload);
-			return;
+//		this.tradeResults.add(new TradeResult(trade.getUsername(), newPosition));
+		List<com.fintek.ets.db.model.Trade> tradesForUser = cachedService.getTradesForUser(trade.getUsername());
+		Portfolio pfolio = new Portfolio();
+		for(com.fintek.ets.db.model.Trade e : tradesForUser){
+			pfolio.addPosition(new PortfolioPosition(e.getId(), e.getSymbol(), e.getSide(), Double.valueOf(e.getSize()), Double.valueOf(e.getTradePrice()), getDateString(e.getTradeDate())));			
 		}
+		this.messagingTemplate.convertAndSendToUser(trade.getUsername(), "/queue/position-updates", pfolio.getPositions());	
+		System.out.println("Exitting executeTrade.....");
+		
+	}
 
-		this.tradeResults.add(new TradeResult(trade.getUsername(), newPosition));
+	private String getDateString(Date tradeDate) {
+		String DATE_FORMAT = "yyyy.MM.dd HH:mm:ss";
+		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+		String stringDate = sdf.format(tradeDate);
+		return stringDate;
 	}
 
 	@Scheduled(fixedDelay=1500)
@@ -78,6 +102,15 @@ public class TradeServiceImpl implements TradeService {
 	
 	@PostConstruct
 	public void start() {
+	}
+	
+	private Order getOrder(Trade trade){
+		Order order = new Order();
+		order.setSide(trade.getAction().name());
+		order.setSize(Double.toString(trade.getSize()));
+		order.setSymbol(trade.getSymbol());
+		order.setUserID(trade.getUsername());
+		return order;
 	}
 
 

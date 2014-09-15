@@ -15,8 +15,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import scala.Array;
-
 import com.fintek.ets.db.dao.OrderDAO;
 import com.fintek.ets.db.dao.PortfolioDAO;
 import com.fintek.ets.db.dao.TradeDAO;
@@ -70,6 +68,13 @@ public class CachedServiceImpl implements CachedService {
 	
 	private void loadTrades() {
 		List<Trade> tradeList = tradeDAO.getTradeList();
+		logger.info("tradeList..... "+tradeList.size());
+		if(trades.size() > 0){
+			trades.clear();			
+		}
+		if(tradesByUser.size() > 0){
+			tradesByUser.clear();			
+		}
 		for(Trade e : tradeList) {
 			trades.add(e);	
 			List<Trade> list = tradesByUser.get(e.getUserID());
@@ -117,6 +122,18 @@ public class CachedServiceImpl implements CachedService {
 	@Override
 	public Map<String, List<com.fintek.ets.db.model.Trade>> getTradesByUser() {
 		return Collections.unmodifiableMap(tradesByUser);
+	}
+
+	@Override
+	public void saveTrade(Trade trade) {
+		tradeDAO.saveTrade(trade);
+		loadTrades();
+	}
+
+	@Override
+	public List<Trade> getTradesForUser(String userid) {
+		List<Trade> tradesForUser = tradeDAO.getTradesForUser(userid);
+		return tradesForUser;
 	}
 
 }

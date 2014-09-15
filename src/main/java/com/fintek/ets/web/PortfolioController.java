@@ -54,6 +54,7 @@ public class PortfolioController {
 	@MessageExceptionHandler
 	@SendToUser("/queue/errors")
 	public String handleException(Throwable exception) {
+		logger.error("In handleException()....", exception);
 		return exception.getMessage();
 	}
 

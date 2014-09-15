@@ -1,5 +1,7 @@
 package com.fintek.ets;
 
+import java.util.Date;
+
 /**
  * The portfolio position class.
  * 
@@ -12,6 +14,7 @@ public class PortfolioPosition {
 	private final String ticker;
 	private final double price;
 	private final int shares;
+	private String tradeDate;
 	
 	private final long updateTime;	
 	private String order;
@@ -20,12 +23,13 @@ public class PortfolioPosition {
 	private double size;
 	private String symbol;
 	
-	public PortfolioPosition(String order, String symbol, String type, double size, double price) {
+	public PortfolioPosition(String order, String symbol, String type, double size, double price, String tradeDate) {
 		this.order = order;
 		this.symbol = symbol;
 		this.type = type;
 		this.size = size;
 		this.price = price;
+		this.tradeDate = tradeDate;
 		
 		this.ticker = symbol;
 		this.shares = (int) size;
@@ -119,6 +123,16 @@ public class PortfolioPosition {
 
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
+	}
+
+
+	public String getTradeDate() {
+		return tradeDate;
+	}
+
+
+	public void setTradeDate(String tradeDate) {
+		this.tradeDate = tradeDate;
 	}
 
 }

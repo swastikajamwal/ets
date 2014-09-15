@@ -2,11 +2,14 @@ package com.fintek.ets.service;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.logging.Log;
@@ -31,6 +34,7 @@ public class QuoteService implements ApplicationListener<BrokerAvailabilityEvent
 	private final StockQuoteGenerator quoteGenerator = new StockQuoteGenerator();
 	private final FXQuoteGenerator fxQuoteGenerator = new FXQuoteGenerator();
 	private AtomicBoolean brokerAvailable = new AtomicBoolean();
+	private List<QuoteListener> quoteListeners = new CopyOnWriteArrayList<>();
 
 
 	@Autowired
@@ -57,7 +61,12 @@ public class QuoteService implements ApplicationListener<BrokerAvailabilityEvent
 	
 	@Scheduled(fixedDelay=4000)
 	public void sendFXQuotes() {
-		for(FXQuote quote : this.fxQuoteGenerator.generateQuotes()) {
+		Set<FXQuote> generatedQuotes = this.fxQuoteGenerator.generateQuotes();
+		Set<FXQuote> unmodifiableQuotes = Collections.unmodifiableSet(generatedQuotes);
+		for(QuoteListener listener : quoteListeners){
+			listener.onQuote(unmodifiableQuotes);			
+		}
+		for(FXQuote quote : generatedQuotes) {
 //			logger.trace("Sending quote " + quote);
 			if (this.brokerAvailable.get()) {
 				this.messagingTemplate.convertAndSend("/topic/price.currency." + quote.getSymbol(), quote);
@@ -102,6 +111,11 @@ public class QuoteService implements ApplicationListener<BrokerAvailabilityEvent
 			return seedPrice.add(priceChange);
 		}
 
+	}
+
+
+	public void registerQuoteListener(QuoteListener listener) {
+		quoteListeners.add(listener);
 	}
 	
 }

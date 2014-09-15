@@ -29,14 +29,16 @@ public class UserDAOImpl implements UserDAO {
 		Session session = sessionFactory.openSession();
 		try {
 			trans = session.beginTransaction();
-			return session.createQuery("from User").list();
+			List<User> ls = session.createQuery("from User").list();
+			trans.commit();
+			return ls;
 		}catch(Throwable t){
 			System.err.println("Exception in getUserList()....");
 			t.printStackTrace();
 			trans.rollback();						
 		}finally{
-			if(session.isConnected()) {
-				trans.commit();
+			if(session != null) {
+				session.close();
 			}
 		}
 		return null;

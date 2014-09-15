@@ -9,7 +9,7 @@ package com.fintek.ets.service;
 public class Trade {
 
 	private String symbol;
-	private int size;
+	private double size;
 	private Side action;
 	private String username;
 
@@ -21,7 +21,7 @@ public class Trade {
 		this.symbol = symbol;
 	}
 
-	public int getSize() {
+	public double getSize() {
 		return this.size;
 	}
 
@@ -47,7 +47,7 @@ public class Trade {
 
 	@Override
 	public String toString() {
-		return "[ticker=" + this.symbol + ", size=" + this.size
+		return "[symbol=" + this.symbol + ", size=" + this.size
 				+ ", action=" + this.action + ", username=" + this.username + "]";
 	}
 

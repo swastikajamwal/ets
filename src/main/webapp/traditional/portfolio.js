@@ -26,8 +26,11 @@ function ApplicationModel(stompClient) {
     	  self.portfolio().updateCurrentPrice(JSON.parse(message.body));
       });
       stompClient.subscribe("/user/queue/position-updates", function(message) {
-        self.pushNotification("Position update " + message.body);
-        self.portfolio().updatePosition(JSON.parse(message.body));
+    	 var pos = JSON.parse(message.body);
+        self.pushNotification("Positions update " + pos.length);
+//        self.portfolio().clearPositions();
+//        self.portfolio().loadPositions(JSON.parse(message.body));
+        self.portfolio().updatePositions(JSON.parse(message.body));
       });
       stompClient.subscribe("/user/queue/errors", function(message) {
         self.pushNotification("Error " + message.body);
@@ -56,11 +59,12 @@ function PortfolioModel() {
   self.rows = ko.observableArray();
 
   self.totalShares = ko.computed(function() {
-    var result = 0;
-    for ( var i = 0; i < self.rows().length; i++) {
-      result += self.rows()[i].shares();
-    }
-    return result;
+//    var result = 0;
+//    for ( var i = 0; i < self.rows().length; i++) {
+//      result += self.rows()[i].shares();
+//    }
+//    return result;
+	  return self.rows().length;
   });
 
   self.totalValue = ko.pureComputed(function() {
@@ -78,9 +82,35 @@ function PortfolioModel() {
     for ( var i = 0; i < positions.length; i++) {
       var row = new PortfolioRow(positions[i]);
       self.rows.push(row);
-      rowLookup[row.ticker] = row;
-      //alert(row.ticker);
+      //rowLookup[row.ticker] = row;
+      for(var x=0; x<100; x++){
+    	  if(rowLookup.hasOwnProperty(x)){
+    	  }  else{
+    		  rowLookup[x] = row; 
+    		  break;
+    	  }  	  
+      }
     }
+  };
+  
+  self.clearPositions = function() {
+//	  alert("self.rows().length "+self.rows().length);
+	  //self.rows([]);
+//	  console.log("clearing positions... ");
+	  for(var x=0; x<100; x++){
+    	  if(rowLookup.hasOwnProperty(x)){
+//    		  alert("clearing rowLookup property "+x);
+    		  delete rowLookup[x];
+    	  }  else{
+    		  break;
+    	  }  	  
+      }
+	  //console.log("self.rows.length "+self.rows().length);
+	  //self.rows([]);
+	  while(self.rows().length > 0){
+		  self.rows.pop();		  
+	  }
+	  //console.log("positions cleared... ");
   };
 
   self.processQuote = function(quote) {
@@ -89,17 +119,44 @@ function PortfolioModel() {
     }
   };
 
-  self.updatePosition = function(position) {
-    rowLookup[position.ticker].shares(position.shares);
+  self.updatePositions = function(positions) {
+	  for ( var i = 0; i < positions.length; i++) {
+		  var exists = false;
+		  for (var x = 0; x < self.rows().length; x++) {
+			  alert('self.rows[x].order '+self.rows[x].order);
+			  if (self.rows[x].order == positions[i].order){
+				  exists = true;
+				  break;				  
+			  }			  
+		  }
+		  if (!exists) {
+			  var row = new PortfolioRow(positions[i]);
+			  self.rows.push(row);
+			  for(var x=0; x<100; x++){
+		    	  if(rowLookup.hasOwnProperty(x)){
+		    	  }  else{
+		    		  rowLookup[x] = row; 
+		    		  break;
+		    	  }  	  
+		      }			  			  
+		  }	      
+	    }
   };
   
   self.updateCurrentPrice = function(quote) {
-	  //alert('In portfolio.updateCurrentPrice: '+quote.symbol);
-	  if (rowLookup.hasOwnProperty(quote.symbol)){
-		  //alert('has prop: '+quote.symbol);
-		  rowLookup[quote.symbol].updateCurrentPrice(quote);	
-		  self.totalValue;
-	  }
+//	  if (rowLookup.hasOwnProperty(quote.symbol)){
+//		  rowLookup[quote.symbol].updateCurrentPrice(quote);	
+//		  self.totalValue;
+//	  }
+	  for(var x=0; x<100; x++){
+    	  if(rowLookup.hasOwnProperty(x)){
+    		  if(rowLookup[x].symbol == quote.symbol){
+    			  rowLookup[x].updateCurrentPrice(quote);    			  
+    		  }
+    	  }else{
+    		  break;
+    	  }  	  
+      }
   };
 };
 
@@ -107,13 +164,7 @@ function PortfolioModel() {
 
 function PortfolioRow(data) {
   var self = this;
-  //alert('data-> '+data);
-  //alert('order: '+data.order);
-  //alert('type: '+data.type);
-  //alert('symbol: '+data.symbol);
-  //alert('company: '+data.company);
-  //alert('price: '+data.price);
-  //alert('size: '+data.size);
+  self.todo = ko.observable();
   self.order = data.order;
   self.type = ko.observable(data.type);
   self.symbol = data.symbol;
@@ -122,7 +173,7 @@ function PortfolioRow(data) {
   self.size = data.size;
   self.price = ko.observable(data.price);
   self.currentPrice = ko.observable();
-  self.updateTime = data.updateTime;
+  self.tradeDate = data.tradeDate;
   self.formattedPrice = ko.computed(function() { return "$" + self.price().toFixed(2); });
   self.change = ko.observable(0);
   self.arrow = ko.observable();
@@ -161,6 +212,7 @@ function TradeModel(stompClient) {
 
   self.showBuy  = function(row) { self.showModal('Buy', row) }
   self.showSell = function(row) { self.showModal('Sell', row) }
+  self.showAction = function(row) { self.showModal('Action', row) }
 
   self.showModal = function(action, row) {
     self.action(action);
@@ -178,7 +230,7 @@ function TradeModel(stompClient) {
   })
   
   var validateShares = function() {
-      if (isNaN(self.sharesToTrade()) || (self.sharesToTrade() < 1)) {
+      if (isNaN(self.sharesToTrade()) || (self.sharesToTrade() < 0.1)) {
         self.error('Invalid number');
         return false;
       }
@@ -188,15 +240,21 @@ function TradeModel(stompClient) {
       }
       return true;
   }
+  
+  self.clickAction = function(doAction, data, event){
+	  alert(doAction);
+	  self.action = doAction;
+	  return true;
+  }
 
   self.executeTrade = function() {
     if (!self.suppressValidation() && !validateShares()) {
       return;
     }
     var trade = {
-        "action" : self.action(),
-        "ticker" : self.currentRow().ticker,
-        "shares" : self.sharesToTrade()
+        "action" : 'Buy',
+        "symbol" : self.currentRow().symbol,
+        "size" : self.sharesToTrade()
       };
     console.log(trade);
     stompClient.send("/app/trade", {}, JSON.stringify(trade));

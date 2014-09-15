@@ -28,14 +28,16 @@ public class OrderDAOImpl implements OrderDAO {
 		Session session = sessionFactory.openSession();
 		try {
 			trans = session.beginTransaction();
-			return session.createQuery("from Order").list();
+			List<Order> ls = session.createQuery("from Order").list();
+			trans.commit();
+			return ls;
 		}catch(Throwable t){
 			System.err.println("Exception in getOrderList()....");
 			t.printStackTrace();
 			trans.rollback();						
 		}finally{
-			if(session.isConnected()) {
-				trans.commit();
+			if(session != null) {
+				session.close();
 			}
 		}
 		return null;

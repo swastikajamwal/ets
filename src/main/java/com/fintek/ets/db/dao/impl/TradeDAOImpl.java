@@ -26,18 +26,21 @@ public class TradeDAOImpl implements TradeDAO {
 
 	@Override
 	public List<Trade> getTradeList() {
+		System.out.println("getTradeList.....");
 		Transaction trans = null;
 		Session session = sessionFactory.openSession();
 		try {
 			trans = session.beginTransaction();
-			return session.createQuery("from Trade").list();
+			List<Trade> ls = session.createQuery("from Trade").list();
+			trans.commit();
+			return ls;
 		}catch(Throwable t){
 			System.err.println("Exception in getTradeList()....");
 			t.printStackTrace();
 			trans.rollback();						
 		}finally{
-			if(session.isConnected()) {
-				trans.commit();
+			if(session != null) {
+				session.close();
 			}
 		}
 		return null;
@@ -45,8 +48,43 @@ public class TradeDAOImpl implements TradeDAO {
 
 	@Override
 	public void saveTrade(Trade trade) {
-		// TODO Auto-generated method stub
-		this.sessionFactory.getCurrentSession().save(trade);
+		System.out.println("savingTrade.....");
+		Transaction trans = null;
+		Session session = sessionFactory.openSession();
+		try {
+			trans = session.beginTransaction();
+			session.save(trade);
+			trans.commit();
+		}catch(Throwable t){
+			System.err.println("Exception in saveTrade()....");
+			t.printStackTrace();
+			trans.rollback();						
+		}finally{
+			if(session != null) {
+				session.close();
+			}
+		}
+	}
+
+	@Override
+	public List<Trade> getTradesForUser(String userid) {
+		Transaction trans = null;
+		Session session = sessionFactory.openSession();
+		try {
+			trans = session.beginTransaction();
+			List<Trade> ls = session.createQuery("from Trade t where t.userID='"+userid+"' ").list();
+			trans.commit();
+			return ls;
+		}catch(Throwable t){
+			System.err.println("Exception in getTradeList()....");
+			t.printStackTrace();
+			trans.rollback();						
+		}finally{
+			if(session != null) {
+				session.close();
+			}
+		}
+		return null;
 	}
 	
 

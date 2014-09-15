@@ -28,14 +28,16 @@ public class PortfolioDAOImpl implements PortfolioDAO {
 		Session session = sessionFactory.openSession();
 		try {
 			trans = session.beginTransaction();
-			return session.createQuery("from TradePortfolio").list();
+			List<TradePortfolio> ls = session.createQuery("from TradePortfolio").list();
+			trans.commit();
+			return ls;
 		}catch(Throwable t){
 			System.err.println("Exception in getPortfolioList()....");
 			t.printStackTrace();
 			trans.rollback();						
 		}finally{
-			if(session.isConnected()) {
-				trans.commit();
+			if(session != null) {
+				session.close();
 			}
 		}
 		return null;

@@ -1,7 +1,9 @@
 package com.fintek.ets;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -15,14 +17,14 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 public class Portfolio {
 
-	private final Map<String,PortfolioPosition> positionLookup = new LinkedHashMap<String,PortfolioPosition>();
+	private final List<PortfolioPosition> positions = new LinkedList<PortfolioPosition>();
 	private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
 
 	public List<PortfolioPosition> getPositions() {
 		lock.readLock().lock();
 		try {
-			return new ArrayList<PortfolioPosition>(positionLookup.values());
+			return Collections.unmodifiableList(positions);
 		}finally {
 			lock.readLock().unlock();
 		}
@@ -31,19 +33,25 @@ public class Portfolio {
 	public void addPosition(PortfolioPosition position) {
 		lock.writeLock().lock();
 		try {
-			this.positionLookup.put(position.getTicker(), position);
+			this.positions.add(position);
 		}finally {
 			lock.writeLock().unlock();
 		}
 	}
 
-	public PortfolioPosition getPortfolioPosition(String ticker) {
+	public PortfolioPosition getPortfolioPosition(String id) {
 		lock.readLock().lock();
 		try {
-			return this.positionLookup.get(ticker);
+			for(PortfolioPosition position : positions){
+				if(position.getOrder().equals(id)){
+					return position;					
+				}
+				
+			}
 		}finally {
 			lock.readLock().unlock();
 		}
+		return null;
 	}
 
 	/**
@@ -75,7 +83,7 @@ public class Portfolio {
 		lock.writeLock().lock();
 		try {
 			position = new PortfolioPosition(position, -sharesToSell);
-			this.positionLookup.put(ticker, position);
+			this.positions.add(position);
 		}finally {
 			lock.writeLock().unlock();
 		}

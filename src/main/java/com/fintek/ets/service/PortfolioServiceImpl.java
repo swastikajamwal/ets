@@ -1,9 +1,13 @@
 package com.fintek.ets.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.annotation.PostConstruct;
 
@@ -23,7 +27,7 @@ import com.fintek.ets.db.model.Trade;
 public class PortfolioServiceImpl implements PortfolioService {
 
 	// user -> Portfolio
-	private final Map<String, Portfolio> portfolioLookup = new HashMap<>();
+	private final ConcurrentMap<String, Portfolio> portfolioLookup = new ConcurrentHashMap<>();
 	
 	private final CachedService cachedService;
 	
@@ -35,39 +39,41 @@ public class PortfolioServiceImpl implements PortfolioService {
 	
 	@PostConstruct
 	public void init() {
-		
+		loadTrades();	
+	}
+	
+	private void loadTrades(){
 		Map<String, List<Trade>> tradesByUser = cachedService.getTradesByUser();
 		Set<String> keySet = tradesByUser.keySet();
 		for(String key : keySet) {
 			List<Trade> list = tradesByUser.get(key);
+			System.out.println("trades by user "+key+" : "+list.size());
 			Portfolio portfolio = new Portfolio();
 			for(Trade trade : list) {
-				portfolio.addPosition(new PortfolioPosition(trade.getId(), trade.getSymbol(), trade.getSide(), Double.valueOf(trade.getSize()), Double.valueOf(trade.getTradePrice())));			
+				portfolio.addPosition(new PortfolioPosition(trade.getId(), trade.getSymbol(), trade.getSide(), Double.valueOf(trade.getSize()), Double.valueOf(trade.getTradePrice()), getDateString(trade.getTradeDate())));			
 			}
-			this.portfolioLookup.put(key, portfolio);
-		}
-//		Portfolio portfolio = new Portfolio();
-//		portfolio.addPosition(new PortfolioPosition("Citrix Systems, Inc.", "CTXS", 24.30, 75));
-//		portfolio.addPosition(new PortfolioPosition("Dell Inc.", "DELL", 13.44, 50));
-//		portfolio.addPosition(new PortfolioPosition("Microsoft", "MSFT", 34.15, 33));
-//		portfolio.addPosition(new PortfolioPosition("Oracle", "ORCL", 31.22, 45));
-//		this.portfolioLookup.put("trader1", portfolio);
-
-//		portfolio = new Portfolio();
-//		portfolio.addPosition(new PortfolioPosition("EMC Corporation", "EMC", 24.30, 75));
-//		portfolio.addPosition(new PortfolioPosition("Google Inc", "GOOG", 905.09, 5));
-//		portfolio.addPosition(new PortfolioPosition("VMware, Inc.", "VMW", 65.58, 23));
-//		portfolio.addPosition(new PortfolioPosition("Red Hat", "RHT", 48.30, 15));
-//		this.portfolioLookup.put("admin", portfolio);		
+			this.portfolioLookup.putIfAbsent(key, portfolio);
+		}		
 	}
 
 
 	public Portfolio findPortfolio(String username) {
+		portfolioLookup.clear();
+		loadTrades();
 		Portfolio portfolio = this.portfolioLookup.get(username);
 		if (portfolio == null) {
+			System.out.print("Throwing IllegalArgumentException in findPortfolio...");
 			throw new IllegalArgumentException(username);
 		}
+		System.out.println("PortfolioServiceImpl: returning portfolio for "+username+" with positions: "+portfolio.getPositions().size());
 		return portfolio;
+	}
+	
+	private String getDateString(Date tradeDate) {
+		String DATE_FORMAT = "yyyy.MM.dd HH:mm:ss";
+		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+		String stringDate = sdf.format(tradeDate);
+		return stringDate;
 	}
 
 }

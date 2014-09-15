@@ -13,8 +13,10 @@ import com.fintek.ets.db.model.Trade;
  */
 public interface TradeDAO {
 	
-	public List<Trade> getTradeList();
+	List<Trade> getTradeList();
 	
-	public void saveTrade(Trade order);
+	void saveTrade(Trade order);
+	
+	List<Trade> getTradesForUser(String userid); 
 
 }
