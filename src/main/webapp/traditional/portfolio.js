@@ -182,16 +182,21 @@ function PortfolioRow(data) {
   self.formattedValue =  ko.observable();//ko.computed(function() { return "$" + (100000*self.value()).toFixed(2); });
 
   self.updatePrice = function(newPrice) {
-    var delta = (newPrice - self.price());
+	  var delta = 0;
+	  if(self.type() == 'Buy' || self.type() == 'buy'){
+		  delta = (newPrice - self.price());		  
+	  }else{
+		  delta = (self.price() - newPrice);		  		  
+	  }
     self.arrow((delta < 0) ? '<i class="icon-arrow-down"></i>' : '<i class="icon-arrow-up"></i>');
-    self.change((delta / self.price()).toFixed(5));
+    self.change((delta).toFixed(5));
     //self.price(newPrice);
     self.value(delta * 100000);
     self.formattedValue((delta * 100000).toFixed(2));
   };
   
   self.updateCurrentPrice = function(quote) {
-	  if(self.type == 'buy'){
+	  if(self.type() == 'Buy' || self.type() == 'buy'){
 		  self.currentPrice(quote.bid);
 		  self.updatePrice(quote.bid);
 	  }else{
@@ -247,12 +252,13 @@ function TradeModel(stompClient) {
 	  return true;
   }
 
-  self.executeTrade = function() {
+  self.executeTrade = function(doAction, data, event) {
+	//alert('from executeTrade '+ doAction);
     if (!self.suppressValidation() && !validateShares()) {
       return;
     }
     var trade = {
-        "action" : 'Buy',
+        "action" : doAction,
         "symbol" : self.currentRow().symbol,
         "size" : self.sharesToTrade()
       };

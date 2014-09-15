@@ -19,6 +19,7 @@ import com.fintek.ets.Portfolio;
 import com.fintek.ets.PortfolioPosition;
 import com.fintek.ets.db.model.Order;
 import com.fintek.ets.oms.OrderManagementService;
+import com.fintek.ets.service.Trade.Side;
 
 /**
  * The trade service class responsible for execution of trades and updation of portfolio.
@@ -54,12 +55,17 @@ public class TradeServiceImpl implements TradeService {
 		Portfolio portfolio = this.portfolioService.findPortfolio(trade.getUsername());
 		String symbol = trade.getSymbol();
 		double size = trade.getSize();
+		Side action = trade.getAction();
+		if(Side.Close == action){
+			handlePositionClose(trade);						
+		}else{
+			System.out.println("trade: "+trade.toString());
+			com.fintek.ets.db.model.Trade executedTrade = oms.executeOrder(getOrder(trade));
+			
+			cachedService.saveTrade(executedTrade);
+			System.out.println("Trade saved in executeTrade.....");
+		}
 		
-		System.out.println("trade: "+trade.toString());
-		com.fintek.ets.db.model.Trade executedTrade = oms.executeOrder(getOrder(trade));
-		
-		cachedService.saveTrade(executedTrade);
-		System.out.println("Trade saved in executeTrade.....");
 
 //		PortfolioPosition newPosition = (trade.getAction() == Side.Buy) ?
 //				portfolio.buy(symbol, sharesToTrade) : portfolio.sell(symbol, sharesToTrade);
@@ -79,6 +85,11 @@ public class TradeServiceImpl implements TradeService {
 		this.messagingTemplate.convertAndSendToUser(trade.getUsername(), "/queue/position-updates", pfolio.getPositions());	
 		System.out.println("Exitting executeTrade.....");
 		
+	}
+
+	//to raise an opposite order at market conditions and book profits/loss. 
+	private void handlePositionClose(Trade trade) {
+		logger.debug("closing position... " );				
 	}
 
 	private String getDateString(Date tradeDate) {

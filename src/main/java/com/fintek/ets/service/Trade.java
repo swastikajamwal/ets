@@ -53,7 +53,7 @@ public class Trade {
 
 
 	public enum Side {
-		Buy, Sell;
+		Buy, Sell, Close;
 	}
 
 }

@@ -17,13 +17,13 @@
          <span class="text-info" data-bind="text: username"><em></em></span>&nbsp;
          <button data-bind="click: logout" class="btn"><i class="icon-off"></i></button>
        </div>
-       <h3 class="muted">ETS</h3>
+       <h3 class="muted">Electronic Trading System</h3>
      </div>
   	<table>
   		<thead>
   			<tr>
   				<th><h5 class="muted">Market Watch</h5></th>
-  				<th><h5 class="muted">Chart</h5></th>
+  				<th><h5 class="muted">Chart - GBPUSD</h5></th>
   			</tr>
   		</thead>
 	  	<tbody>
@@ -126,10 +126,10 @@
       
       <div id="trade-dialog" class="modal hide fade" tabindex="-1">
         <div class="modal-body">
-          <form class="form-horizontal" data-bind="submit: trade().executeTrade">
         <!-- 
-          <form class="form-horizontal">
+          <form class="form-horizontal" data-bind="submit: trade().executeTrade">
           -->
+          <form class="form-horizontal">
             <fieldset>
               <legend>
                 <!-- span data-bind="text: trade().action"></span-->
@@ -176,11 +176,11 @@
             <div class="row">
             	<div class="span3">
             		<!-- span data-bind="value: 'Sell'"></span-->
-            		<button class="btn-block-sell" data-bind="submit: function(data, event) { trade().clickAction('Sell', data, event) }">Sell by Market</button>
+            		<button class="btn-block-sell" type="submit" data-bind="click: function(data, event) { trade().executeTrade('Sell', data, event) }">Sell by Market</button>
             	</div>
             	<div class="span3">
             		<!-- span data-bind="value: 'Buy'"></span-->
-            		<button class="btn-block-buy" data-bind="submit: function(data, event) { trade().clickAction('Buy', data, event) }">Buy by Market</button>
+            		<button class="btn-block-buy" type="submit" data-bind="click: function(data, event) { trade().executeTrade('Buy', data, event) }">Buy by Market</button>
             	</div>            	
             </div>
             <div class="row">
