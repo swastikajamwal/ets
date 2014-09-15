@@ -2,6 +2,7 @@ package com.fintek.ets.db.dao.impl;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -31,7 +32,7 @@ public class TradeDAOImpl implements TradeDAO {
 		Session session = sessionFactory.openSession();
 		try {
 			trans = session.beginTransaction();
-			List<Trade> ls = session.createQuery("from Trade").list();
+			List<Trade> ls = session.createQuery("from Trade t where t.status='open'").list();
 			trans.commit();
 			return ls;
 		}catch(Throwable t){
@@ -85,6 +86,26 @@ public class TradeDAOImpl implements TradeDAO {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void closeTrade(String id) {
+		Transaction trans = null;
+		Session session = sessionFactory.openSession();
+		try {
+			trans = session.beginTransaction();
+			Query query = session.createQuery("update Trade t set t.status='closed' where t.id='"+id+"' ");
+			query.executeUpdate();
+			trans.commit();
+		}catch(Throwable t){
+			System.err.println("Exception in getTradeList()....");
+			t.printStackTrace();
+			trans.rollback();						
+		}finally{
+			if(session != null) {
+				session.close();
+			}
+		}
 	}
 	
 

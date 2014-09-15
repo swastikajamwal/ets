@@ -18,5 +18,7 @@ public interface TradeDAO {
 	void saveTrade(Trade order);
 	
 	List<Trade> getTradesForUser(String userid); 
+	
+	void closeTrade(String id);
 
 }

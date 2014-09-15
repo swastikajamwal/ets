@@ -258,6 +258,7 @@ function TradeModel(stompClient) {
       return;
     }
     var trade = {
+    	"order" : self.currentRow().order,
         "action" : doAction,
         "symbol" : self.currentRow().symbol,
         "size" : self.sharesToTrade()

@@ -108,7 +108,7 @@
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="8">Total</td>
+              <td colspan="8">P/L: </span></td>
               <td data-bind="text: portfolio().totalShares" class="number"></td>
               <td data-bind="text: portfolio().totalValue" class="number"></td>
               <td></td>
@@ -185,7 +185,7 @@
             </div>
             <div class="row">
             	<div class="span6">
-            		<button class="btn-block-close" type="submit" value="close">
+            		<button class="btn-block-close" type="submit" data-bind="click: function(data, event) { trade().executeTrade('Close', data, event) }">
             			Close #<span data-bind="text: trade().currentRow().order"></span> 
             			<span data-bind="text: trade().currentRow().type"></span> 
             			<span data-bind="text: trade().currentRow().size"></span> 

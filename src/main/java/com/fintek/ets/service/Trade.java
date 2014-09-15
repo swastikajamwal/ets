@@ -12,6 +12,7 @@ public class Trade {
 	private double size;
 	private Side action;
 	private String username;
+	private String order;
 
 	public String getSymbol() {
 		return this.symbol;
@@ -54,6 +55,15 @@ public class Trade {
 
 	public enum Side {
 		Buy, Sell, Close;
+	}
+
+
+	public String getOrder() {
+		return order;
+	}
+
+	public void setOrder(String order) {
+		this.order = order;
 	}
 
 }

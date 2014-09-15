@@ -15,5 +15,7 @@ public interface CachedService {
 	void saveTrade(com.fintek.ets.db.model.Trade trade);
 	
 	List<com.fintek.ets.db.model.Trade> getTradesForUser(String userid);
+	
+	void closeTrade(String id);
 
 }

@@ -136,4 +136,10 @@ public class CachedServiceImpl implements CachedService {
 		return tradesForUser;
 	}
 
+	@Override
+	public void closeTrade(String id) {
+		tradeDAO.closeTrade(id);
+		loadTrades();		
+	}
+
 }

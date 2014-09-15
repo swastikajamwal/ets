@@ -43,7 +43,7 @@ public class OrderManagementServiceImpl implements OrderManagementService, Quote
 		trade.setSymbol(order.getSymbol());
 		trade.setTradeDate(Calendar.getInstance().getTime());
 		trade.setUserID(order.getUserID());
-		trade.setStatus("position");
+		trade.setStatus("open");
 		if(order.getSide().equals(Side.BUY)){
 			trade.setTradePrice(getQuote(order.getSymbol()).getAsk()+"");
 		}else{

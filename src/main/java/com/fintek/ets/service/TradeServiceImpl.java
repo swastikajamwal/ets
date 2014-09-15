@@ -77,19 +77,28 @@ public class TradeServiceImpl implements TradeService {
 //		}
 
 //		this.tradeResults.add(new TradeResult(trade.getUsername(), newPosition));
-		List<com.fintek.ets.db.model.Trade> tradesForUser = cachedService.getTradesForUser(trade.getUsername());
-		Portfolio pfolio = new Portfolio();
-		for(com.fintek.ets.db.model.Trade e : tradesForUser){
-			pfolio.addPosition(new PortfolioPosition(e.getId(), e.getSymbol(), e.getSide(), Double.valueOf(e.getSize()), Double.valueOf(e.getTradePrice()), getDateString(e.getTradeDate())));			
-		}
-		this.messagingTemplate.convertAndSendToUser(trade.getUsername(), "/queue/position-updates", pfolio.getPositions());	
+		List<PortfolioPosition> positions = getPortfolioPositions(trade);
+		this.messagingTemplate.convertAndSendToUser(trade.getUsername(), "/queue/position-updates", positions);	
 		System.out.println("Exitting executeTrade.....");
 		
+	}
+	
+	private List<PortfolioPosition> getPortfolioPositions(Trade trade) {
+		List<com.fintek.ets.db.model.Trade> tradesForUser = cachedService.getTradesForUser(trade.getUsername());
+		Portfolio portfolio = new Portfolio();
+		for(com.fintek.ets.db.model.Trade e : tradesForUser){
+			portfolio.addPosition(new PortfolioPosition(e.getId(), e.getSymbol(), e.getSide(), Double.valueOf(e.getSize()), Double.valueOf(e.getTradePrice()), getDateString(e.getTradeDate())));			
+		}
+		return portfolio.getPositions();	
 	}
 
 	//to raise an opposite order at market conditions and book profits/loss. 
 	private void handlePositionClose(Trade trade) {
-		logger.debug("closing position... " );				
+		String id = trade.getOrder();
+		logger.debug("closing position... " + id);	
+		cachedService.closeTrade(id);
+		
+		System.out.println("Exitting handlePositionClose.....");
 	}
 
 	private String getDateString(Date tradeDate) {

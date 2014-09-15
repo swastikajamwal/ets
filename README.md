@@ -90,6 +90,9 @@ insert into trade values ('1002', 'EURGBP', '1.0', '0.79977', '2014.09.09 11:23:
 
 insert into portfolio values ('trader1', 'trader1', '10000.000', '0.0');
 
+UPDATE `ets`.`trade` SET `status`='open' WHERE `id`='1001';
+UPDATE `ets`.`trade` SET `status`='open' WHERE `id`='1002';
+
 commit;
 
 
