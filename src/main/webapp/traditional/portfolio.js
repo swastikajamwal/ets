@@ -7,6 +7,7 @@ function ApplicationModel(stompClient) {
   self.trade = ko.observable(new TradeModel(stompClient));
   self.notifications = ko.observableArray();
   self.feed = ko.observable(new FeedModel());
+  
 
   self.connect = function() {
       stompClient.connect({}, function(frame) {
@@ -282,7 +283,7 @@ function FeedModel() {
 	    	var row = new FeedRow(fxquote);
 	    	self.rows.push(row);
 	    	feedRowLookup[fxquote.symbol] = row;
-	    }
+	    }	    
 	  };
 };
 
@@ -308,3 +309,4 @@ function FeedRow(data) {
 		  self.ask(newPrice);
 	  };
 };
+	
